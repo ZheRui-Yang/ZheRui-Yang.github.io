@@ -1,1 +1,290 @@
-<h1>Hello World!</h1>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-TW" xml:lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Zhe-Rui, Yang" />
+  <title>猴子也能懂的 AWS Rekognition 雲端圖片辨識</title>
+  <link rel="stylesheet" href="./css/aws-rek.css" />
+  <link rel="stylesheet" href="./css/aws-rek.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">猴子也能懂的 AWS Rekognition 雲端圖片辨識</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Contents</h2>
+<ul>
+<li><a href="#目標">目標</a></li>
+<li><a href="#步驟">步驟</a>
+<ul>
+<li><a href="#一創建帳號">一、創建帳號</a></li>
+<li><a href="#二建立亞馬遜指令列環境與標準開發者套件">二、建立亞馬遜指令列環境與標準開發者套件</a></li>
+<li><a href="#三安裝-boto-套件">三、安裝 boto 套件</a></li>
+<li><a href="#四複製貼上">四、複製貼上</a></li>
+</ul></li>
+</ul>
+</nav>
+<hr />
+<section id="目標" class="level2">
+<h2>目標</h2>
+<p>在本地端（你的電腦）請亞馬遜幫你看看圖片上有什麼東西。</p>
+<p>這裡使用的是終端機環境。雖然不太親民、也不好看，不過最大的好處是未來 需要自動化、程式化的場合時會比較方便。</p>
+<figure>
+<img src="media/media/goal.png" alt="左半邊是官網上複製下來的程式碼，右半邊是這張圖片的分析結果" /><figcaption aria-hidden="true">左半邊是官網上複製下來的程式碼，右半邊是這張圖片的分析結果</figcaption>
+</figure>
+<p>是的，這份文件的目標就是這麼小。</p>
+<hr />
+</section>
+<section id="步驟" class="level2">
+<h2>步驟</h2>
+<section id="一創建帳號" class="level3">
+<h3>一、創建帳號</h3>
+<p>亞馬遜帳號的結構並不像臉書、IG 等等的帳號，一個帳號就是代表一個人。 它更接近早期大型伺服器的概念：一個擁有無上權限的根帳號（ root ）， 以及底下被根帳號賦予不同程度權限的 IAM 使用者們。</p>
+<p>這樣的結構在早年「伺服器—終端機」架構為主流時相當盛行，後來個人電腦興起後式微。 不過事實上每台電腦也都留有這個結構的影子——這也就是為什麼有時候你會需要按下右鍵， 選擇「以管理者權限執行」（ 或是「 sudo 」）。</p>
+<section id="創建根帳號" class="level4">
+<h4>創建根帳號</h4>
+<p>雖說是開發者帳號，其實也只是亞馬遜服務的使用者。 （略）</p>
+</section>
+<section id="創建-iam-使用者管理者" class="level4">
+<h4>創建 IAM 使用者管理者</h4>
+<p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html">亞馬遜說明頁面</a></p>
+<p>說明頁面第一部份是利用網頁主控台創建新使用者，也就是我們會使用的方式。第二部份利用指令列工具創建使用者 這裡略過不提。</p>
+<section id="為什麼需要創建-iam-使用者" class="level5">
+<h5>為什麼需要創建 IAM 使用者？</h5>
+<p>簡而言之：安全性、以及資源管理。</p>
+<ul>
+<li>安全性<br />
+若是平常使用的是根帳號（擁有無限大的權限，包含刪除自己），哪天資安出問題我們就只好祈禱 駭客沒有惡搞受害專案的習性。<br />
+</li>
+<li>資源管理<br />
+也許根帳號是公司的，你不會想看到坐你旁邊，負責撰寫人臉辨識的小明拿公司資源做論壇輿情分析找出 最受好評的番號。</li>
+</ul>
+<p>若以上兩點還不能說服你，那至少亞馬遜官方強迫你要有。</p>
+<p>當然，IAM 使用者也需要一個管理者。這位管理者也就是我們現在要建立的 IAM 使用者管理者。</p>
+</section>
+<section id="建立" class="level5">
+<h5>建立</h5>
+<p>點進上面的說明頁面，往下拉會看到「 Creating an administrator IAM user and user group (console) 」 這個標籤下方有「 Sign in to the IAM console 」的超連結。</p>
+<figure>
+<img src="media/media/iamconsole.png" alt="Sign in to the IAM console" /><figcaption aria-hidden="true">Sign in to the IAM console</figcaption>
+</figure>
+<p>選擇以根帳號登入</p>
+<figure>
+<img src="media/media/rootlogin.png" alt="記得是要選 root ，因為我們還沒有 IAM 使用者" /><figcaption aria-hidden="true">記得是要選 root ，因為我們還沒有 IAM 使用者</figcaption>
+</figure>
+<p>說明頁面第二步是講讓 IAM 使用者管理者也能接帳單的功能，「 IAM User and Role Access to Billing Information 」 在頁面的下方要往下拉一下。</p>
+<p>左邊導覽列選 「 Users 」</p>
+<figure>
+<img src="media/media/user.png" alt="Users 在這裡" /><figcaption aria-hidden="true">Users 在這裡</figcaption>
+</figure>
+<p>選 「Add user 」</p>
+<figure>
+<img src="media/media/adduser.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
+</figure>
+<p>（圖片上存在的 IAM 使用者是我已經創建好的，新的帳號不會有）</p>
+<p>輸入名字，官方建議是使用 Administrator ，比較不會忘記誰是誰。 紅圈處若是 IAM 使用者管理者我們請務必勾選，不能進主控台的管理者跟沒有醬汁的炸蝦一樣 沒有存在的必要。</p>
+<figure>
+<img src="media/media/username.png" alt="下方是新使用者的密碼選項，依照自己喜好選擇即可" /><figcaption aria-hidden="true">下方是新使用者的密碼選項，依照自己喜好選擇即可</figcaption>
+</figure>
+</section>
+<section id="設定權限" class="level5">
+<h5>設定權限</h5>
+<p>上面設定完名字之後會進入使用者權限設定。由於管理者很有可能不只一位，官方建議直接開一個權限群組 來讓新生的使用者管理者加入。 當然也可以直接把權限加到使用者身上。這裡我們會開一個管理者群組加入後，再把我們的目標 —— AWS Rekognition 服務所需的權限一個個直接放到我們的新身份身上。</p>
+<p>（註：讓使用者管理者還有其他的權限可能並不是最漂亮的作法）</p>
+<section id="建立權限群組並加入" class="level6">
+<h6>建立權限群組並加入</h6>
+<p>按「 Create Group 」</p>
+<figure>
+<img src="media/media/creategroup.png" alt="藍色框框的地方要注意；新帳號底下應該是沒有任何群組的" /><figcaption aria-hidden="true">藍色框框的地方要注意；新帳號底下應該是沒有任何群組的</figcaption>
+</figure>
+<p>搜尋「AdministratorAccess 」並勾選後面沒有接其他字的那個。</p>
+<figure>
+<img src="media/media/groupauthselect.png" alt="在第一個的話不用搜也沒關係" /><figcaption aria-hidden="true">在第一個的話不用搜也沒關係</figcaption>
+</figure>
+<p>確認建立後回來系統會自動幫你勾選剛建立的新權限群組，按下下一步就好。</p>
+<figure>
+<img src="media/media/confirmjoingroup.png" alt="不過還是瞄一眼確認一下" /><figcaption aria-hidden="true">不過還是瞄一眼確認一下</figcaption>
+</figure>
+<p>接下來是幫新生使用者打標籤（以辨識職責權限，不強制）——&gt; 二次確認 ——&gt; 確認創建使用者</p>
+<p>完成後會看到這個畫面</p>
+<figure>
+<img src="media/media/finish.png" alt="紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）" /><figcaption aria-hidden="true">紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）</figcaption>
+</figure>
+</section>
+<section id="對使用者添加權限" class="level6">
+<h6>對使用者添加權限</h6>
+<p>接下來我們要將 AWS Rekognition 所需的兩樣權限直接加到新使用者身上。 這時候我們還是根帳號，還沒登入新使用者。</p>
+<p>上方搜尋欄旁的 Services 下拉選單左側應該會有個 IAM ，點選進入。 若沒看到，直接搜尋也可</p>
+<figure>
+<img src="media/media/searchiam.png" alt="直接搜尋長這樣" /><figcaption aria-hidden="true">直接搜尋長這樣</figcaption>
+</figure>
+<p>在 IAM 管理頁面上選擇 Users ，也就是我們建立新使用者的地方。接著點選熱騰騰的新使用者 ，來到這個畫面點「 add permission 」</p>
+<figure>
+<img src="media/media/addpermision.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
+</figure>
+<p>選「 Attach existing polices directly 」，下面直接搜尋「 <strong>AmazonRekognitionFullAccess</strong> 」、 「 <strong>AmazonS3ReadOnlyAccess</strong> 」這兩項權限並勾選起來。</p>
+<figure>
+<img src="media/media/addpermission2.png" alt="總共有 667 項不同的權限，我們不要一個一個逛好不好…" /><figcaption aria-hidden="true">總共有 667 項不同的權限，我們不要一個一個逛好不好…</figcaption>
+</figure>
+<p>勾選完右下角藍色「 Review 」確認後「 Add permissions 」就完成了。</p>
+</section>
+</section>
+</section>
+</section>
+<section id="二建立亞馬遜指令列環境與標準開發者套件" class="level3">
+<h3>二、建立亞馬遜指令列環境與標準開發者套件</h3>
+<p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/setup-awscli-sdk.html">說明頁面</a></p>
+<p>說明頁面給了指令列環境的安裝說明超連結以及安裝後的設定。安裝後的設定是指「在指令列（本機）使用剛剛 創建好的使用者身份」以及指定使用哪個伺服器。</p>
+<section id="指令列環境與標準開發者套件是什麼" class="level4">
+<h4>指令列環境與標準開發者套件是什麼？</h4>
+<ul>
+<li>指令列環境（ command line interface, CLI ）<br />
+是指利用文字與電腦溝通的人—機介面。例如：Microdoft Windows 的 cmd 、powershell；MacOS 的 Termianl.app。 總之是一些黑黑的、上面字密密麻麻的，會用的人都長的很像駭客的東西。<br />
+噢！對了！ Spyder 裡的 IPython shell （右下角那個）也是這個東東。<br />
+</li>
+<li>標準開發套件（standard developer kit, SDK ） 是軟體服務提供者方便下游軟體開發者加速開發的一組工具。</li>
+</ul>
+</section>
+<section id="下載及安裝" class="level4">
+<h4>下載及安裝</h4>
+<p>說明頁面的這裡是下載及安裝超連結</p>
+<p><img src="media/media/clidownloadhref.png" /></p>
+<p>選擇 Version 2</p>
+<figure>
+<img src="media/media/v2.png" alt="老實說我也不知道 v1 跟 v2 差在哪，不過我不在意" /><figcaption aria-hidden="true">老實說我也不知道 v1 跟 v2 差在哪，不過我不在意</figcaption>
+</figure>
+<p>按下去會進入介紹版本的頁面，我們不須停留</p>
+<figure>
+<img src="media/media/installcli.png" alt="這裡有較詳盡的版本介紹" /><figcaption aria-hidden="true">這裡有較詳盡的版本介紹</figcaption>
+</figure>
+<p>照著你的電腦選擇作業系統。</p>
+<section id="windows" class="level5">
+<h5>Windows</h5>
+<p>安裝檔是一個 .msi 檔。沒記錯的話點兩下啟動後用下一步大法就沒問題了。</p>
+<figure>
+<img src="media/media/win.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
+</figure>
+<p>安裝程式結束後，在開始選單內搜尋「 cmd 」，開啟後輸入</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
+<p>若有跳出類似 <code>aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0</code> 的文字的話就代表這部份成功。</p>
+</section>
+<section id="macos" class="level5">
+<h5>MacOS</h5>
+<p>MacOS 的安裝方式有兩種：一種是圖形介面、一種是用命令列安裝。會用命令列安裝的人應該不需要 這份文件的指引。</p>
+<p>安裝檔是一個 .pkg 檔。沒猜錯的話點兩下啟動後照著說明走就沒問題了。</p>
+<figure>
+<img src="media/media/mac.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
+</figure>
+<section id="安裝給所有使用者" class="level6">
+<h6>安裝給所有使用者</h6>
+<p>若想安裝給全部的使用者，需要用到 <code>sudo</code> 指令提取管理員權限。 - 基本上可以安裝在任意目錄底下，但是建議 <code>/usr/local/aws-cli</code> 。 - 安裝程式會自動在 <code>/usr/local/bin/aws</code> 建立一個軟連結讓所有使用者取用。</p>
+</section>
+<section id="只安裝給現在使用者" class="level6">
+<h6>只安裝給現在使用者</h6>
+<p>若只想安裝給正在使用的使用者雖不須用 <code>sudo</code> 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。</p>
+<ul>
+<li><p>怎麼知道系統路徑在哪裡？<br />
+打開 Termianl.app 輸入 <code>echo $PATH</code> ，出現的文字就是在描述系統路徑包含的目錄</p></li>
+<li><p>若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？<br />
+用 <code>sudo</code> 提昇權限或聯絡你的系統管理員<br />
+</p></li>
+<li><p>啊要怎麼打軟連結？</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer </span></code></pre></div>
+<p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。尾端跟隨的目錄 是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code>/aws</code> 跟 <code>/aws_completer</code> 不要改）。 雖然可以更換，不過 <code>/usr/local/bin</code> 是執行檔集中處，放在一起比較好管理。 另外若是有寫入權限的話，最前面的 <code>sudo</code> 是可以省略的。</p></li>
+</ul>
+<p>安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> aws</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
+<p>第一個指令的回覆會是軟連結的位置，長的差不多這樣 <code>/usr/local/bin/aws</code>；<br />
+並且第二個指令的輸出若類似 <code>aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0</code> 的文字的話就代表這部份成功。</p>
+</section>
+</section>
+<section id="linux-與-docker" class="level5">
+<h5>Linux 與 Docker</h5>
+<p>你認真？這份文件不是為會用這兩者之一的你準備的。</p>
+</section>
+</section>
+<section id="設定本地端-aws-cli-身份與地區" class="level4">
+<h4>設定本地端 AWS CLI 身份與地區</h4>
+<section id="取得身份-id-與密鑰" class="level5">
+<h5>取得身份 ID 與密鑰</h5>
+<p>本地端安裝完，我們再回到 IAM 主控台、由左側導覽區進入 Users 頁面，選擇剛剛建立好的新使用者。 選擇「安全認證」頁籤</p>
+<figure>
+<img src="media/media/sc.png" alt="Security credentails" /><figcaption aria-hidden="true">Security credentails</figcaption>
+</figure>
+<p>按下按鈕產生密鑰</p>
+<figure>
+<img src="media/media/key.png" alt="Create access key" /><figcaption aria-hidden="true">Create access key</figcaption>
+</figure>
+<p>產生出來的畫面。這兩個資訊相當敏感，請妥善保存。</p>
+<figure>
+<img src="media/media/akey.png" alt="建議這裡可以存下來" /><figcaption aria-hidden="true">建議這裡可以存下來</figcaption>
+</figure>
+</section>
+<section id="地區的選擇" class="level5">
+<h5>地區的選擇</h5>
+<p>雖然選擇靠近自己地理位置越近的伺服器連線延遲就越少，但是某些服務在某些伺服器 上面並不提供。例如我本來是選擇日本讚岐的伺服器，不過那邊並不提供這次目標的服務 。我們選擇美東一號伺服器<strong>us-east-1</strong>。</p>
+</section>
+<section id="aws-cli-基本設定" class="level5">
+<h5>AWS CLI 基本設定</h5>
+<p>打開你的終端機（ cmd, Terminal.app, …etc ）輸入以下指令</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> configure</span></code></pre></div>
+<p>程式會依序問我們四個問題：身份 ID 、密鑰、預設區域，與輸出格式。<br />
+前三者剛才都準備好了。輸出格式就寫 <code>json</code> 就行了。 JSON 是個好格式，我們馬上會學到。</p>
+<p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code>.aws</code> 目錄， 並在裡面產生 <code>credentials</code> 及 <code>config</code> 文字檔。未來需要改動設定時除了 <code>aws config</code> 指令外， 編輯這兩個檔案也有同樣的效果。</p>
+<section id="什麼是家目錄" class="level6">
+<h6>什麼是家目錄？</h6>
+<p>使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的 目錄則相反。許多軟體都會預設把東西丟在家目錄。 - Windows：位於 <code>C:\\Users\USERNAME</code> 在<code>cmd</code> 中使用 <code>echo %USERPROFILE%</code> 做確認；在 <code>File Explorer</code> （平常翻看資料夾那個）中 導覽列輸入 <code>%USERPROFILE%</code> 直接跳過去。 - MacOS： 位於 <code>/Users/USERNAME</code></p>
+</section>
+</section>
+</section>
+</section>
+<section id="三安裝-boto-套件" class="level3">
+<h3>三、安裝 boto 套件</h3>
+<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html">Boto3 Documentation</a><br />
+<code>boto</code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介 亞馬遜雲端服務。</p>
+<section id="anaconda" class="level4">
+<h4>Anaconda</h4>
+<p>使用 Anaconda 的朋友，若有分割虛擬環境就進入虛擬環境。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> anaconda boto</span></code></pre></div>
+</section>
+</section>
+<section id="四複製貼上" class="level3">
+<h3>四、複製貼上</h3>
+<p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html">參考頁面</a><br />
+將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 boto3 套件的環境下執行。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> boto3</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_labels_local_file(photo):</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    client<span class="op">=</span>boto3.client(<span class="st">&#39;rekognition&#39;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(photo, <span class="st">&#39;rb&#39;</span>) <span class="im">as</span> image:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> client.detect_labels(Image<span class="op">=</span>{<span class="st">&#39;Bytes&#39;</span>: image.read()})</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;Detected labels in &#39;</span> <span class="op">+</span> photo)    </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> response[<span class="st">&#39;Labels&#39;</span>]:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span> (label[<span class="st">&#39;Name&#39;</span>] <span class="op">+</span> <span class="st">&#39; : &#39;</span> <span class="op">+</span> <span class="bu">str</span>(label[<span class="st">&#39;Confidence&#39;</span>]))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(response[<span class="st">&#39;Labels&#39;</span>])</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    photo<span class="op">=</span><span class="st">&#39;photo&#39;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    label_count<span class="op">=</span>detect_labels_local_file(photo)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Labels detected: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(label_count))</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+</section>
+</section>
+</body>
+</html>
