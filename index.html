@@ -206,12 +206,15 @@
 <li><p>啊要怎麼打軟連結？</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer </span></code></pre></div>
-<p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。尾端跟隨的目錄 是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code>/aws</code> 跟 <code>/aws_completer</code> 不要改）。 雖然可以更換，不過 <code>/usr/local/bin</code> 是執行檔集中處，放在一起比較好管理。 另外若是有寫入權限的話，最前面的 <code>sudo</code> 是可以省略的。</p></li>
+<p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。<br />
+尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code>/aws</code> 跟 <code>/aws_completer</code> 不要改）。<br />
+雖然可以更換，不過 <code>/usr/local/bin</code> 是執行檔集中處，放在一起比較好管理。<br />
+另外若是有寫入權限的話，最前面的 <code>sudo</code> 是可以省略的。</p></li>
 </ul>
 <p>安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> aws</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
-<p>第一個指令的回覆會是軟連結的位置，長的差不多這樣「<code>/usr/local/bin/aws</code>」；<br />
+<p>第一個指令的回覆會是軟連結的位置，長的差不多這樣「<code>/usr/local/bin/aws</code>」<br />
 並且第二個指令的輸出若類似以下的文字的話就代表這部份成功。</p>
 <pre><code>aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0</code></pre>
 <p>解除安裝說明也在同一頁面上，可以參考。</p>
@@ -234,27 +237,28 @@
 <figure>
 <img src="media/media/key.png" alt="Create access key" /><figcaption aria-hidden="true">Create access key</figcaption>
 </figure>
-<p>產生出來的畫面。這兩個資訊相當敏感，請妥善保存。</p>
+<p>產生出來的畫面如下。這兩個資訊相當敏感，請妥善保存。</p>
 <figure>
 <img src="media/media/akey.png" alt="建議這裡可以存下來" /><figcaption aria-hidden="true">建議這裡可以存下來</figcaption>
 </figure>
 </section>
 <section id="地區的選擇" class="level5">
 <h5>地區的選擇</h5>
-<p>雖然選擇靠近自己地理位置越近的伺服器連線延遲就越少，但是某些服務在某些伺服器 上面並不提供。例如我本來是選擇日本讚岐的伺服器，不過那邊並不提供這次目標的服務 。我們選擇美東一號伺服器<strong>us-east-1</strong>。</p>
+<p>雖然選擇靠近自己地理位置越近的伺服器連線延遲就越少，但是某些服務在某些伺服器上面並不提供。例如我本來是選擇日本讚岐的伺服器，不過那邊並不提供這次目標的服務。我們選擇美東一號伺服器 <strong>us-east-1</strong> 。</p>
 </section>
 <section id="aws-cli-基本設定" class="level5">
 <h5>AWS CLI 基本設定</h5>
 <p>打開你的終端機（ cmd, Terminal.app, …etc ）輸入以下指令</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> configure</span></code></pre></div>
 <p>程式會依序問我們四個問題：身份 ID 、密鑰、預設區域，與輸出格式。<br />
-前三者剛才都準備好了。輸出格式就寫 <code>json</code> 就行了。 JSON 是個好格式，我們馬上會學到。</p>
-<p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code>.aws</code> 目錄， 並在裡面產生 <code>credentials</code> 及 <code>config</code> 文字檔。未來需要改動設定時除了 <code>aws config</code> 指令外， 編輯這兩個檔案也有同樣的效果。</p>
+前三者剛才都準備好了。輸出格式就寫 <code>json</code> 就行了， JSON 是個好格式。</p>
+<p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code>.aws</code> 目錄，並在裡面產生 <code>credentials</code> 及 <code>config</code> 文字檔。未來需要改動設定時除了 <code>aws config</code> 指令外，編輯這兩個檔案也有同樣的效果。</p>
 <section id="什麼是家目錄" class="level6">
 <h6>什麼是家目錄？</h6>
-<p>使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的 目錄則相反。許多軟體都會預設把東西丟在家目錄。</p>
+<p>使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的目錄則相反。<br />
+許多軟體都會預設把東西丟在家目錄。</p>
 <ul>
-<li>Windows：位於 <code>C:\\Users\USERNAME</code> 在<code>cmd</code> 中使用 <code>echo %USERPROFILE%</code> 做確認；在 <code>File Explorer</code> （平常翻看資料夾那個）中 導覽列輸入 <code>%USERPROFILE%</code> 直接跳過去。</li>
+<li>Windows：位於 <code>C:\\Users\USERNAME</code> 在<code>cmd</code> 中使用 <code>echo %USERPROFILE%</code> 做確認；在 <code>File Explorer</code> （平常翻看資料夾那個）中導覽列輸入 <code>%USERPROFILE%</code> 直接跳過去。</li>
 <li>MacOS： 位於 <code>/Users/USERNAME</code></li>
 </ul>
 </section>
@@ -265,6 +269,12 @@
 <h3>三、安裝 boto 套件</h3>
 <p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html">Boto3 Documentation</a><br />
 <code>boto</code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。</p>
+<section id="什麼是-api" class="level6">
+<h6>什麼是 API ？</h6>
+<p>應用程式介面（ Application Programming Interface, API ）。</p>
+<p>算是蠻抽象的概念，泛指任何應用程式與另一個應用程式互動的介面。<br />
+以硬體舉例來說：桌上型電腦（程式 A ）的鍵盤（程式 B ）可能需要透過 USB 、PCI ，或是藍芽連接上電腦。這時我們稱他們連接的方式為 API 。</p>
+</section>
 <section id="anaconda" class="level4">
 <h4>Anaconda</h4>
 <p>若有分割虛擬環境就進入虛擬環境。</p>
@@ -312,7 +322,7 @@
 <p>同時我們也需要給予該使用者 AmazonRekognitionFullAccess 與 AmazonS3ReadOnlyAccess 兩樣授權才足以利用這項雲端服務。</p>
 <p>接著注意某些伺服器並沒有提供某些服務，所以我們選擇 us-east-1 地區。</p>
 <p>最後在我們的 Python 開發環境下安裝 <code>boto3</code> 套件。</p>
-<p>以上條件湊齊後我們跟 AWS Rekognition 的線就接通了。用第四節的程式碼進行第一次雲端辨識吧！</p>
+<p>以上條件湊齊後我們跟 AWS Rekognition 的線就接通了！用第四節的程式碼進行第一次雲端辨識吧！</p>
 </section>
 </section>
 </body>
