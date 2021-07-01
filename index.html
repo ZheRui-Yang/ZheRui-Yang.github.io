@@ -23,6 +23,7 @@
 <li><a href="#二建立亞馬遜指令列環境與標準開發者套件">二、建立亞馬遜指令列環境與標準開發者套件</a></li>
 <li><a href="#三安裝-boto-套件">三、安裝 boto 套件</a></li>
 <li><a href="#四複製貼上">四、複製貼上</a></li>
+<li><a href="#五總結">五、總結</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -107,7 +108,7 @@
 <figure>
 <img src="media/media/confirmjoingroup.png" alt="不過還是瞄一眼確認一下" /><figcaption aria-hidden="true">不過還是瞄一眼確認一下</figcaption>
 </figure>
-<p>接下來是幫新生使用者打標籤（以辨識職責權限，不強制）——&gt; 二次確認 ——&gt; 確認創建使用者</p>
+<p>接下來是幫新生使用者打標籤（以辨識職責權限，不強制）—&gt; 二次確認 —&gt; 確認創建使用者</p>
 <p>完成後會看到這個畫面</p>
 <figure>
 <img src="media/media/finish.png" alt="紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）" /><figcaption aria-hidden="true">紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）</figcaption>
@@ -248,14 +249,15 @@
 <code>boto</code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介 亞馬遜雲端服務。</p>
 <section id="anaconda" class="level4">
 <h4>Anaconda</h4>
-<p>使用 Anaconda 的朋友，若有分割虛擬環境就進入虛擬環境。</p>
+<p>若有分割虛擬環境就進入虛擬環境。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> anaconda boto</span></code></pre></div>
 </section>
 </section>
 <section id="四複製貼上" class="level3">
 <h3>四、複製貼上</h3>
 <p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html">參考頁面</a><br />
-將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 boto3 套件的環境下執行。</p>
+將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 <code>boto3</code> 套件的環境下執行。<br />
+記得 <code>photo = 'photo'</code> 的字串 <code>'photo'</code> 改成你的圖片所在路徑。</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -284,6 +286,12 @@
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+</section>
+<section id="五總結" class="level3">
+<h3>五、總結</h3>
+<p>身份、權限、伺服器地區、開發套件、程式碼，這五項是這個小練習的必備元素。 我們需要一個 IAM 使用者的身份來讓 AWS 伺服器認識我們，從主控台取得身份 ID 與 密鑰來讓本地端的開發者套件能夠使用我們的 IAM 身份。同時我們也需要給予該使用者 AmazonRekognitionFullAccess 與 AmazonS3ReadOnlyAccess 兩樣授權才足以利用這項雲端服務。<br />
+也要注意某些伺服器並沒有提供某些服務，所以我們選擇 us-east-1 地區。 接著在我們的 Python 開發環境下安裝 <code>boto3</code> 套件。<br />
+以上條件湊齊後我們跟 AWS Rekognition 的線就接通了。用第四節的程式碼進行第一次雲端辨識吧！</p>
 </section>
 </section>
 </body>
