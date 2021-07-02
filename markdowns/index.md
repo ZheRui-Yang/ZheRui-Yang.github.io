@@ -7,11 +7,11 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 # 目標
 
 
-在本地端（你的電腦）請亞馬遜幫你看看圖片上有什麼東西。
+在本地端（你的電腦）請亞馬遜幫你照片上人像的情緒及外觀特徵。
 
 這裡使用的是終端機環境。雖然不太親民、也不好看，不過最大的好處是未來需要自動化、程式化的場合時會比較方便。
 
-![左半邊是官網上複製下來的程式碼，右半邊是這張圖片的分析結果](./media/goal.png)
+![左半邊是官網上複製下來的程式碼，右半邊是照片的分析結果](./media/goal.png)
 
 是的，這份文件的目標就是這麼小。
 
@@ -287,36 +287,100 @@ conda install -c anaconda boto
 將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 `boto3` 套件的環境下執行。  
 記得 `photo = 'photo'` 的字串 `'photo'` 改成你的圖片所在路徑。
 
-```python
+```{#codeExample .python .numberLines}
 #Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
 
+import json
 import boto3
 
-def detect_labels_local_file(photo):
-
-
-    client=boto3.client('rekognition')
+def detect_faces_local_file(photo):
+    client = boto3.client('rekognition')
    
     with open(photo, 'rb') as image:
-        response = client.detect_labels(Image={'Bytes': image.read()})
-        
-    print('Detected labels in ' + photo)    
-    for label in response['Labels']:
-        print (label['Name'] + ' : ' + str(label['Confidence']))
+        response = client.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
 
-    return len(response['Labels'])
+    for faceDetail in response['FaceDetails']:
+        print('The detected face is between ' + str(faceDetail['AgeRange']['Low']) 
+              + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
+
+        print('Here are the other attributes:')
+        print(json.dumps(faceDetail, indent=4, sort_keys=True))
+
+	# Access predictions for individual face details and print them
+        print("Gender: " + str(faceDetail['Gender']))
+        print("Smile: " + str(faceDetail['Smile']))
+        print("Eyeglasses: " + str(faceDetail['Eyeglasses']))
+        print("Emotions: " + str(faceDetail['Emotions'][0]))
+
+    return len(response['FaceDetails'])
 
 def main():
-    photo='photo'
+    photo = 'photo'
 
-    label_count=detect_labels_local_file(photo)
+    label_count = detect_faces_local_file(photo)
     print("Labels detected: " + str(label_count))
 
 
 if __name__ == "__main__":
     main()
 ```
+
+由於 Python 是利用縮排來辨別程式區塊，我們先從縮排為 $0$ 的三個部份開始講解。
+
+- 第 $4$、$5$ 行 — `import xxx`   
+  模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 [`boto3`][boto3] 與 [`json`][json] 模組。`boto3` 不匯入就不能簡單使用 AWS ；`json` 在這裡的作用是讓輸出規則化。  
+
+- 第 $7$ 與 $28$ 行 — `def detect_faces_local_file(photo):` 與 `def main():`   
+  自定義[函式][func]。`main` 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。`detect_faces_local_file` 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。   
+  函式之下的區塊會在被呼叫時執行。由於 Python 不使用括弧，而是使用縮排來定義每個區塊。造就相對於其他語言更一致且簡潔的文件風格，但相對的一個小小的、看不見的空白也能毀掉你的程式碼。
+
+- 第 $35$ 行 — `if __name__ == "__main__":`   
+  表示以下的區塊只有這份文件（ \_\_name\_\_ ）正是當前執行的 script （ \_\_main\_\_ ）時才會被執行。  
+  這區塊的存在是在防止這份文件作為模組被其他文件匯入（ import ）時[發生意外狀況][1]。  
+  由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 `main()` 這個函式。 
+
+再來我們來看兩個函式的內容。
+
+`main` 的內容只有三行，它首先把圖片[路徑][path]存入 `photo` 這個變數中，再來以 `photo` 為參數呼叫 `detect_faces_local_file` 這個函式，並把回傳值存入 `label_count` ，最後印出一行字。
+
+最後才是重頭戲— `detect_faces_local_file` 函式
+
+- 第 $8$ 行利用 [`boto3.client`][client] 這個方法將 [Amazon Rekognition 的 low-level client][rekclient] （ `Rekognition.Client` 類別）存入 `client` 變數
+
+- 第 $10$ 行使用 [`with`][with] 陳述句將變數 `photo` 這個路徑記載的檔案利用 [`open`][open] 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 `image`
+
+- 第 $11$ 行呼叫 [`detect_faces`][detect] 方法並將結果存入 `response` 變數   
+
+- 第 $13$ 行利用 [for 陳述句][for]迭代 `response` 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 `faceDetail` 並執行底下的區塊。  
+  這裡得提一下，`delete_faces` 方法的回傳值是個[字典][dict]。
+- 第 $18$ 行利用 `json` 模組的 `dumps` 函式將 `faceDetail` 轉換成格式為 JSON 的字串，並打印出來。
+
+- 第 $26$ 行出現 `return` 陳述句。回傳 `response` 裡鍵為 `FaceDetails` 的值的數量。
+  執行 `return` 陳述句必定會結束函式，並同時令函式回傳接在 `return` 後面的運算結果。
+
+以上就是這份文件所執行的內容。除去打印、匯入、函式定義，以及主程式區塊外，我們事實上只有做三件事：  
+
+1. 建立 `Rekognition.Client` 物件 — 第 $8$ 行
+1. 送出請求 — 第 $10$ 與第 $11$ 行
+1. 處理回傳值 — 第 $13$ 與第 $18$ 行
+
+未來若想利用 AWS 的 Face Analysis 服務，我們只需要解析回傳值的結構即可。輕鬆又愜意的人工智慧影像分析，AWS 挺你！
+
+
+[1]: http://blog.castman.net/%E6%95%99%E5%AD%B8/2018/01/27/python-name-main.html
+[boto3]: https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
+[json]: https://docs.python.org/3/library/json.html
+[path]: https://zh.wikipedia.org/zh-tw/%E8%B7%AF%E5%BE%84_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
+[func]: https://shengyu7697.github.io/python-function/
+[client]: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.client
+[rekclient]: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#client
+[with]: https://www.geeksforgeeks.org/with-statement-in-python/
+[open]: https://docs.python.org/3/library/functions.html#open
+[detect]: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#Rekognition.Client.delete_faces
+[for]: https://docs.python.org/zh-tw/3/tutorial/controlflow.html#for-statements
+[dict]: https://docs.python.org/zh-tw/3/tutorial/datastructures.html?highlight=%E5%AD%97%E5%85%B8#dictionaries
+
 
 ## 五、總結
 

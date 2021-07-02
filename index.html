@@ -8,6 +8,7 @@
   <title>猴子也能懂的 AWS Rekognition 雲端圖片辨識</title>
   <link rel="stylesheet" href="./css/aws-rek.css" />
   <link rel="stylesheet" href="./css/aws-rek.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 </head>
 <body>
 <header id="title-block-header">
@@ -30,10 +31,10 @@
 <hr />
 <section id="目標" class="level2">
 <h2>目標</h2>
-<p>在本地端（你的電腦）請亞馬遜幫你看看圖片上有什麼東西。</p>
+<p>在本地端（你的電腦）請亞馬遜幫你照片上人像的情緒及外觀特徵。</p>
 <p>這裡使用的是終端機環境。雖然不太親民、也不好看，不過最大的好處是未來需要自動化、程式化的場合時會比較方便。</p>
 <figure>
-<img src="media/media/goal.png" alt="左半邊是官網上複製下來的程式碼，右半邊是這張圖片的分析結果" /><figcaption aria-hidden="true">左半邊是官網上複製下來的程式碼，右半邊是這張圖片的分析結果</figcaption>
+<img src="./media/goal.png" alt="左半邊是官網上複製下來的程式碼，右半邊是照片的分析結果" /><figcaption aria-hidden="true">左半邊是官網上複製下來的程式碼，右半邊是照片的分析結果</figcaption>
 </figure>
 <p>是的，這份文件的目標就是這麼小。</p>
 <hr />
@@ -69,25 +70,25 @@
 <h5>建立</h5>
 <p>點進上面的說明頁面，往下拉會看到「 Creating an administrator IAM user and user group (console) 」 這個標籤下方有「 Sign in to the IAM console 」的超連結。</p>
 <figure>
-<img src="media/media/iamconsole.png" alt="Sign in to the IAM console" /><figcaption aria-hidden="true">Sign in to the IAM console</figcaption>
+<img src="./media/iamconsole.png" alt="Sign in to the IAM console" /><figcaption aria-hidden="true">Sign in to the IAM console</figcaption>
 </figure>
 <p>選擇以根帳號登入</p>
 <figure>
-<img src="media/media/rootlogin.png" alt="記得是要選 root ，因為我們還沒有 IAM 使用者" /><figcaption aria-hidden="true">記得是要選 root ，因為我們還沒有 IAM 使用者</figcaption>
+<img src="./media/rootlogin.png" alt="記得是要選 root ，因為我們還沒有 IAM 使用者" /><figcaption aria-hidden="true">記得是要選 root ，因為我們還沒有 IAM 使用者</figcaption>
 </figure>
 <p>說明頁面第二步是講讓 IAM 使用者管理者也能接帳單的功能，「 IAM User and Role Access to Billing Information 」在頁面的下方要往下拉一下。</p>
 <p>左邊導覽列選 「 Users 」</p>
 <figure>
-<img src="media/media/user.png" alt="Users 在這裡" /><figcaption aria-hidden="true">Users 在這裡</figcaption>
+<img src="./media/user.png" alt="Users 在這裡" /><figcaption aria-hidden="true">Users 在這裡</figcaption>
 </figure>
 <p>選 「Add user 」</p>
 <figure>
-<img src="media/media/adduser.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
+<img src="./media/adduser.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
 </figure>
 <p>（圖片上存在的 IAM 使用者是我已經創建好的，新的帳號不會有）</p>
 <p>輸入名字，官方建議是使用 Administrator ，比較不會忘記誰是誰。 紅圈處若是 IAM 使用者管理者我們請務必勾選，不能進主控台的管理者跟沒有醬汁的炸蝦一樣沒有存在的必要。</p>
 <figure>
-<img src="media/media/username.png" alt="下方是新使用者的密碼選項，依照自己喜好選擇即可" /><figcaption aria-hidden="true">下方是新使用者的密碼選項，依照自己喜好選擇即可</figcaption>
+<img src="./media/username.png" alt="下方是新使用者的密碼選項，依照自己喜好選擇即可" /><figcaption aria-hidden="true">下方是新使用者的密碼選項，依照自己喜好選擇即可</figcaption>
 </figure>
 </section>
 <section id="設定權限" class="level5">
@@ -99,20 +100,20 @@
 <h6>建立權限群組並加入</h6>
 <p>按「 Create Group 」</p>
 <figure>
-<img src="media/media/creategroup.png" alt="藍色框框的地方要注意；新帳號底下應該是沒有任何群組的" /><figcaption aria-hidden="true">藍色框框的地方要注意；新帳號底下應該是沒有任何群組的</figcaption>
+<img src="./media/creategroup.png" alt="藍色框框的地方要注意；新帳號底下應該是沒有任何群組的" /><figcaption aria-hidden="true">藍色框框的地方要注意；新帳號底下應該是沒有任何群組的</figcaption>
 </figure>
 <p>搜尋「AdministratorAccess 」並勾選後面沒有接其他字的那個。</p>
 <figure>
-<img src="media/media/groupauthselect.png" alt="在第一個的話不用搜也沒關係" /><figcaption aria-hidden="true">在第一個的話不用搜也沒關係</figcaption>
+<img src="./media/groupauthselect.png" alt="在第一個的話不用搜也沒關係" /><figcaption aria-hidden="true">在第一個的話不用搜也沒關係</figcaption>
 </figure>
 <p>確認建立後回來系統會自動幫你勾選剛建立的新權限群組，按下下一步就好。</p>
 <figure>
-<img src="media/media/confirmjoingroup.png" alt="不過還是瞄一眼確認一下" /><figcaption aria-hidden="true">不過還是瞄一眼確認一下</figcaption>
+<img src="./media/confirmjoingroup.png" alt="不過還是瞄一眼確認一下" /><figcaption aria-hidden="true">不過還是瞄一眼確認一下</figcaption>
 </figure>
 <p>接下來是幫新生使用者打標籤（以辨識職責權限，不強制）—&gt; 二次確認 —&gt; 確認創建使用者</p>
 <p>完成後會看到這個畫面</p>
 <figure>
-<img src="media/media/finish.png" alt="紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）" /><figcaption aria-hidden="true">紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）</figcaption>
+<img src="./media/finish.png" alt="紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）" /><figcaption aria-hidden="true">紅圈那個可以選擇下載下來，不過裡面目前只有登入連結與名稱（或剛設定的密碼）</figcaption>
 </figure>
 </section>
 <section id="對使用者添加權限" class="level6">
@@ -120,11 +121,11 @@
 <p>接下來我們要將 AWS Rekognition 所需的兩樣權限直接加到新使用者身上。 這時候我們還是根帳號，還沒登入新使用者。</p>
 <p>上方搜尋欄旁的 Services 下拉選單左側應該會有個 IAM ，點選進入。 若沒看到，直接搜尋也可</p>
 <figure>
-<img src="media/media/searchiam.png" alt="直接搜尋長這樣" /><figcaption aria-hidden="true">直接搜尋長這樣</figcaption>
+<img src="./media/searchiam.png" alt="直接搜尋長這樣" /><figcaption aria-hidden="true">直接搜尋長這樣</figcaption>
 </figure>
 <p>在 IAM 管理頁面上選擇 Users ，也就是我們建立新使用者的地方。接著點選熱騰騰的新使用者 ，來到這個畫面點「 add permission 」</p>
 <figure>
-<img src="media/media/addpermision.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
+<img src="./media/addpermision.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
 </figure>
 <p>選「 Attach existing polices directly 」，下面直接搜尋</p>
 <ul>
@@ -133,7 +134,7 @@
 </ul>
 <p>這兩項權限並勾選起來。</p>
 <figure>
-<img src="media/media/addpermission2.png" alt="總共有 667 項不同的權限，我們不要一個一個逛好不好…" /><figcaption aria-hidden="true">總共有 667 項不同的權限，我們不要一個一個逛好不好…</figcaption>
+<img src="./media/addpermission2.png" alt="總共有 667 項不同的權限，我們不要一個一個逛好不好…" /><figcaption aria-hidden="true">總共有 667 項不同的權限，我們不要一個一個逛好不好…</figcaption>
 </figure>
 <p>勾選完右下角藍色「 Review 」確認後「 Add permissions 」就完成了。</p>
 </section>
@@ -158,21 +159,21 @@
 <section id="下載及安裝" class="level4">
 <h4>下載及安裝</h4>
 <p>說明頁面的這裡是下載及安裝超連結</p>
-<p><img src="media/media/clidownloadhref.png" /></p>
+<p><img src="./media/clidownloadhref.png" /></p>
 <p>選擇 Version 2</p>
 <figure>
-<img src="media/media/v2.png" alt="老實說我也不知道 v1 跟 v2 差在哪，不過我不在意" /><figcaption aria-hidden="true">老實說我也不知道 v1 跟 v2 差在哪，不過我不在意</figcaption>
+<img src="./media/v2.png" alt="老實說我也不知道 v1 跟 v2 差在哪，不過我不在意" /><figcaption aria-hidden="true">老實說我也不知道 v1 跟 v2 差在哪，不過我不在意</figcaption>
 </figure>
 <p>按下去會進入介紹版本的頁面，我們不須停留</p>
 <figure>
-<img src="media/media/installcli.png" alt="這裡有較詳盡的版本介紹" /><figcaption aria-hidden="true">這裡有較詳盡的版本介紹</figcaption>
+<img src="./media/installcli.png" alt="這裡有較詳盡的版本介紹" /><figcaption aria-hidden="true">這裡有較詳盡的版本介紹</figcaption>
 </figure>
 <p>照著你的電腦選擇作業系統。</p>
 <section id="windows" class="level5">
 <h5>Windows</h5>
 <p>安裝檔是一個 .msi 檔。沒記錯的話點兩下啟動後用下一步大法就沒問題了。</p>
 <figure>
-<img src="media/media/win.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
+<img src="./media/win.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
 </figure>
 <p>安裝程式結束後，在開始選單內搜尋「 cmd 」，開啟後輸入</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
@@ -185,7 +186,7 @@
 <p>MacOS 的安裝方式有兩種：一種是圖形介面、一種是用命令列安裝。會用命令列安裝的人應該不需要這份文件的指引。</p>
 <p>安裝檔是一個 .pkg 檔。沒猜錯的話點兩下啟動後照著說明走就沒問題了。</p>
 <figure>
-<img src="media/media/mac.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
+<img src="./media/mac.png" alt="安裝檔下載連結" /><figcaption aria-hidden="true">安裝檔下載連結</figcaption>
 </figure>
 <section id="安裝給所有使用者" class="level6">
 <h6>安裝給所有使用者</h6>
@@ -227,21 +228,21 @@
 </section>
 <section id="設定本地端-aws-cli-身份與地區" class="level4">
 <h4>設定本地端 AWS CLI 身份與地區</h4>
-<section id="取得身份-id-與密鑰" class="level5">
-<h5>取得身份 ID 與密鑰</h5>
+<section id="取得身份代碼與密鑰" class="level5">
+<h5>取得身份代碼與密鑰</h5>
 <p>本地端安裝完，我們再回到 IAM 主控台、由左側導覽區進入 Users 頁面，選擇剛剛建立好的新使用者。 選擇「安全認證」頁籤</p>
 <figure>
-<img src="media/media/sc.png" alt="Security credentails" /><figcaption aria-hidden="true">Security credentails</figcaption>
+<img src="./media/sc.png" alt="Security credentails" /><figcaption aria-hidden="true">Security credentails</figcaption>
 </figure>
 <p>按下按鈕產生密鑰</p>
 <figure>
-<img src="media/media/key.png" alt="Create access key" /><figcaption aria-hidden="true">Create access key</figcaption>
+<img src="./media/key.png" alt="Create access key" /><figcaption aria-hidden="true">Create access key</figcaption>
 </figure>
 <p>產生出來的畫面如下。這兩個資訊相當敏感，請妥善保存。</p>
 <figure>
-<img src="media/media/akey.png" alt="建議這裡可以存下來" /><figcaption aria-hidden="true">建議這裡可以存下來</figcaption>
+<img src="./media/akey.png" alt="建議這裡可以存下來" /><figcaption aria-hidden="true">建議這裡可以存下來</figcaption>
 </figure>
-<p>未來若是忘記 ID 與密鑰，可以回到「安全認證」這個頁籤來查詢。</p>
+<p>未來若是忘記身份代碼與密鑰，可以回到「安全認證」這個頁籤來查詢。</p>
 </section>
 <section id="地區的選擇" class="level5">
 <h5>地區的選擇</h5>
@@ -251,7 +252,7 @@
 <h5>AWS CLI 基本設定</h5>
 <p>打開你的終端機（ cmd, Terminal.app, …etc ）輸入以下指令</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> configure</span></code></pre></div>
-<p>程式會依序問我們四個問題：身份 ID 、密鑰、預設區域，與輸出格式。<br />
+<p>程式會依序問我們四個問題：身份代碼、密鑰、預設區域，與輸出格式。<br />
 前三者剛才都準備好了。輸出格式就寫 <code>json</code> 就行了， JSON 是個好格式。</p>
 <p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code>.aws</code> 目錄，並在裡面產生 <code>credentials</code> 及 <code>config</code> 文字檔。未來需要改動設定時除了 <code>aws config</code> 指令外，編輯這兩個檔案也有同樣的效果。</p>
 <section id="什麼是家目錄" class="level6">
@@ -289,39 +290,78 @@
 <p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html">參考頁面</a></p>
 <p>將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 <code>boto3</code> 套件的環境下執行。<br />
 記得 <code>photo = 'photo'</code> 的字串 <code>'photo'</code> 改成你的圖片所在路徑。</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> boto3</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_labels_local_file(photo):</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    client<span class="op">=</span>boto3.client(<span class="st">&#39;rekognition&#39;</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(photo, <span class="st">&#39;rb&#39;</span>) <span class="im">as</span> image:</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> client.detect_labels(Image<span class="op">=</span>{<span class="st">&#39;Bytes&#39;</span>: image.read()})</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;Detected labels in &#39;</span> <span class="op">+</span> photo)    </span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> response[<span class="st">&#39;Labels&#39;</span>]:</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span> (label[<span class="st">&#39;Name&#39;</span>] <span class="op">+</span> <span class="st">&#39; : &#39;</span> <span class="op">+</span> <span class="bu">str</span>(label[<span class="st">&#39;Confidence&#39;</span>]))</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(response[<span class="st">&#39;Labels&#39;</span>])</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    photo<span class="op">=</span><span class="st">&#39;photo&#39;</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    label_count<span class="op">=</span>detect_labels_local_file(photo)</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Labels detected: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(label_count))</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+<div class="sourceCode" id="codeExample"><pre class="sourceCode numberSource python numberLines"><code class="sourceCode python"><span id="codeExample-1"><a href="#codeExample-1"></a><span class="co">#Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span></span>
+<span id="codeExample-2"><a href="#codeExample-2"></a><span class="co">#PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)</span></span>
+<span id="codeExample-3"><a href="#codeExample-3"></a></span>
+<span id="codeExample-4"><a href="#codeExample-4"></a><span class="im">import</span> json</span>
+<span id="codeExample-5"><a href="#codeExample-5"></a><span class="im">import</span> boto3</span>
+<span id="codeExample-6"><a href="#codeExample-6"></a></span>
+<span id="codeExample-7"><a href="#codeExample-7"></a><span class="kw">def</span> detect_faces_local_file(photo):</span>
+<span id="codeExample-8"><a href="#codeExample-8"></a>    client <span class="op">=</span> boto3.client(<span class="st">&#39;rekognition&#39;</span>)</span>
+<span id="codeExample-9"><a href="#codeExample-9"></a>   </span>
+<span id="codeExample-10"><a href="#codeExample-10"></a>    <span class="cf">with</span> <span class="bu">open</span>(photo, <span class="st">&#39;rb&#39;</span>) <span class="im">as</span> image:</span>
+<span id="codeExample-11"><a href="#codeExample-11"></a>        response <span class="op">=</span> client.detect_faces(Image<span class="op">=</span>{<span class="st">&#39;Bytes&#39;</span>: image.read()}, Attributes<span class="op">=</span>[<span class="st">&#39;ALL&#39;</span>])</span>
+<span id="codeExample-12"><a href="#codeExample-12"></a></span>
+<span id="codeExample-13"><a href="#codeExample-13"></a>    <span class="cf">for</span> faceDetail <span class="kw">in</span> response[<span class="st">&#39;FaceDetails&#39;</span>]:</span>
+<span id="codeExample-14"><a href="#codeExample-14"></a>        <span class="bu">print</span>(<span class="st">&#39;The detected face is between &#39;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;AgeRange&#39;</span>][<span class="st">&#39;Low&#39;</span>]) </span>
+<span id="codeExample-15"><a href="#codeExample-15"></a>              <span class="op">+</span> <span class="st">&#39; and &#39;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;AgeRange&#39;</span>][<span class="st">&#39;High&#39;</span>]) <span class="op">+</span> <span class="st">&#39; years old&#39;</span>)</span>
+<span id="codeExample-16"><a href="#codeExample-16"></a></span>
+<span id="codeExample-17"><a href="#codeExample-17"></a>        <span class="bu">print</span>(<span class="st">&#39;Here are the other attributes:&#39;</span>)</span>
+<span id="codeExample-18"><a href="#codeExample-18"></a>        <span class="bu">print</span>(json.dumps(faceDetail, indent<span class="op">=</span><span class="dv">4</span>, sort_keys<span class="op">=</span><span class="va">True</span>))</span>
+<span id="codeExample-19"><a href="#codeExample-19"></a></span>
+<span id="codeExample-20"><a href="#codeExample-20"></a>	<span class="co"># Access predictions for individual face details and print them</span></span>
+<span id="codeExample-21"><a href="#codeExample-21"></a>        <span class="bu">print</span>(<span class="st">&quot;Gender: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;Gender&#39;</span>]))</span>
+<span id="codeExample-22"><a href="#codeExample-22"></a>        <span class="bu">print</span>(<span class="st">&quot;Smile: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;Smile&#39;</span>]))</span>
+<span id="codeExample-23"><a href="#codeExample-23"></a>        <span class="bu">print</span>(<span class="st">&quot;Eyeglasses: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;Eyeglasses&#39;</span>]))</span>
+<span id="codeExample-24"><a href="#codeExample-24"></a>        <span class="bu">print</span>(<span class="st">&quot;Emotions: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(faceDetail[<span class="st">&#39;Emotions&#39;</span>][<span class="dv">0</span>]))</span>
+<span id="codeExample-25"><a href="#codeExample-25"></a></span>
+<span id="codeExample-26"><a href="#codeExample-26"></a>    <span class="cf">return</span> <span class="bu">len</span>(response[<span class="st">&#39;FaceDetails&#39;</span>])</span>
+<span id="codeExample-27"><a href="#codeExample-27"></a></span>
+<span id="codeExample-28"><a href="#codeExample-28"></a><span class="kw">def</span> main():</span>
+<span id="codeExample-29"><a href="#codeExample-29"></a>    photo <span class="op">=</span> <span class="st">&#39;photo&#39;</span></span>
+<span id="codeExample-30"><a href="#codeExample-30"></a></span>
+<span id="codeExample-31"><a href="#codeExample-31"></a>    label_count <span class="op">=</span> detect_faces_local_file(photo)</span>
+<span id="codeExample-32"><a href="#codeExample-32"></a>    <span class="bu">print</span>(<span class="st">&quot;Labels detected: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(label_count))</span>
+<span id="codeExample-33"><a href="#codeExample-33"></a></span>
+<span id="codeExample-34"><a href="#codeExample-34"></a></span>
+<span id="codeExample-35"><a href="#codeExample-35"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="codeExample-36"><a href="#codeExample-36"></a>    main()</span></code></pre></div>
+<p>由於 Python 是利用縮排來辨別程式區塊，我們先從縮排為 <span class="math inline">\(0\)</span> 的三個部份開始講解。</p>
+<ul>
+<li><p>第 <span class="math inline">\(4\)</span>、<span class="math inline">\(5\)</span> 行 — <code>import xxx</code><br />
+模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"><code>boto3</code></a> 與 <a href="https://docs.python.org/3/library/json.html"><code>json</code></a> 模組。<code>boto3</code> 不匯入就不能簡單使用 AWS ；<code>json</code> 在這裡的作用是讓輸出規則化。</p></li>
+<li><p>第 <span class="math inline">\(7\)</span> 與 <span class="math inline">\(28\)</span> 行 — <code>def detect_faces_local_file(photo):</code> 與 <code>def main():</code><br />
+自定義<a href="https://shengyu7697.github.io/python-function/">函式</a>。<code>main</code> 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。<code>detect_faces_local_file</code> 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。<br />
+函式之下的區塊會在被呼叫時執行。由於 Python 不使用括弧，而是使用縮排來定義每個區塊。造就相對於其他語言更一致且簡潔的文件風格，但相對的一個小小的、看不見的空白也能毀掉你的程式碼。</p></li>
+<li><p>第 <span class="math inline">\(35\)</span> 行 — <code>if __name__ == "__main__":</code><br />
+表示以下的區塊只有這份文件（ __name__ ）正是當前執行的 script （ __main__ ）時才會被執行。<br />
+這區塊的存在是在防止這份文件作為模組被其他文件匯入（ import ）時<a href="http://blog.castman.net/%E6%95%99%E5%AD%B8/2018/01/27/python-name-main.html">發生意外狀況</a>。<br />
+由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 <code>main()</code> 這個函式。</p></li>
+</ul>
+<p>再來我們來看兩個函式的內容。</p>
+<p><code>main</code> 的內容只有三行，它首先把圖片<a href="https://zh.wikipedia.org/zh-tw/%E8%B7%AF%E5%BE%84_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">路徑</a>存入 <code>photo</code> 這個變數中，再來以 <code>photo</code> 為參數呼叫 <code>detect_faces_local_file</code> 這個函式，並把回傳值存入 <code>label_count</code> ，最後印出一行字。</p>
+<p>最後才是重頭戲— <code>detect_faces_local_file</code> 函式</p>
+<ul>
+<li><p>第 <span class="math inline">\(8\)</span> 行利用 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.client"><code>boto3.client</code></a> 這個方法將 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#client">Amazon Rekognition 的 low-level client</a> （ <code>Rekognition.Client</code> 類別）存入 <code>client</code> 變數</p></li>
+<li><p>第 <span class="math inline">\(10\)</span> 行使用 <a href="https://www.geeksforgeeks.org/with-statement-in-python/"><code>with</code></a> 陳述句將變數 <code>photo</code> 這個路徑記載的檔案利用 <a href="https://docs.python.org/3/library/functions.html#open"><code>open</code></a> 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 <code>image</code></p></li>
+<li><p>第 <span class="math inline">\(11\)</span> 行呼叫 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#Rekognition.Client.delete_faces"><code>detect_faces</code></a> 方法並將結果存入 <code>response</code> 變數</p></li>
+<li><p>第 <span class="math inline">\(13\)</span> 行利用 <a href="https://docs.python.org/zh-tw/3/tutorial/controlflow.html#for-statements">for 陳述句</a>迭代 <code>response</code> 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 <code>faceDetail</code> 並執行底下的區塊。<br />
+這裡得提一下，<code>delete_faces</code> 方法的回傳值是個<a href="https://docs.python.org/zh-tw/3/tutorial/datastructures.html?highlight=%E5%AD%97%E5%85%B8#dictionaries">字典</a>。</p></li>
+<li><p>第 <span class="math inline">\(18\)</span> 行利用 <code>json</code> 模組的 <code>dumps</code> 函式將 <code>faceDetail</code> 轉換成格式為 JSON 的字串，並打印出來。</p></li>
+<li><p>第 <span class="math inline">\(26\)</span> 行出現 <code>return</code> 陳述句。回傳 <code>response</code> 裡鍵為 <code>FaceDetails</code> 的值的數量。 執行 <code>return</code> 陳述句必定會結束函式，並同時令函式回傳接在 <code>return</code> 後面的運算結果。</p></li>
+</ul>
+<p>以上就是這份文件所執行的內容。除去打印、匯入、函式定義，以及主程式區塊外，我們事實上只有做三件事：</p>
+<ol type="1">
+<li>建立 <code>Rekognition.Client</code> 物件 — 第 <span class="math inline">\(8\)</span> 行</li>
+<li>送出請求 — 第 <span class="math inline">\(10\)</span> 與第 <span class="math inline">\(11\)</span> 行</li>
+<li>處理回傳值 — 第 <span class="math inline">\(13\)</span> 與第 <span class="math inline">\(18\)</span> 行</li>
+</ol>
+<p>未來若想利用 AWS 的 Face Analysis 服務，我們只需要解析回傳值的結構即可。輕鬆又愜意的人工智慧影像分析，AWS 挺你！</p>
 </section>
 <section id="五總結" class="level3">
 <h3>五、總結</h3>
 <p>身份、權限、伺服器地區、開發套件、程式碼，這五項是這個小練習的必備元素。</p>
-<p>我們需要一個 IAM 使用者的身份來讓 AWS 伺服器認識我們，從主控台取得身份 ID 與密鑰來讓本地端的開發者套件能夠使用我們的 IAM 身份。</p>
+<p>我們需要一個 IAM 使用者的身份來讓 AWS 伺服器認識我們，從主控台取得身份代碼與密鑰來讓本地端的開發者套件能夠使用我們的 IAM 身份。</p>
 <p>同時我們也需要給予該使用者 AmazonRekognitionFullAccess 與 AmazonS3ReadOnlyAccess 兩樣授權才足以利用這項雲端服務。</p>
 <p>接著注意某些伺服器並沒有提供某些服務，所以我們選擇 us-east-1 地區。</p>
 <p>最後在我們的 Python 開發環境下安裝 <code>boto3</code> 套件。</p>

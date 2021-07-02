@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-output=(basename $1 .md)
+output=$(basename $1 .md)
+
 
 [ -f $1 ] \
 && [ -f ./config/default.pandoc.conf ] \
