@@ -46,7 +46,7 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 - 資源管理   
   也許根帳號是公司的，你不會想看到坐你旁邊，負責撰寫人臉辨識的小明拿公司資源做論壇輿情分析找出最受好評的番號。
 
-若以上兩點還不能說服你，那至少亞馬遜官方強迫你要有。
+若以上兩點還不能說服你，那至少亞馬遜官方希望你要有。
 
 當然，IAM 使用者也需要一個管理者。這位管理者也就是我們現在要建立的 IAM 使用者管理者。
 
@@ -114,7 +114,7 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 ![直接搜尋長這樣](./media/searchiam.png)
 
 在 IAM 管理頁面上選擇 Users ，也就是我們建立新使用者的地方。接著點選熱騰騰的新使用者
-，來到這個畫面點「 add permission 」
+，來到這個畫面點「 add permissions 」
 
 ![藍色大大的按鈕](./media/addpermision.png)
 
@@ -171,7 +171,7 @@ aws --version
 
 若有跳出類似以下的文字的話就代表這部份成功。
 
-```
+```bash
 aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0
 ```
 
@@ -185,36 +185,36 @@ MacOS 的安裝方式有兩種：一種是圖形介面、一種是用命令列�
 ![安裝檔下載連結](./media/mac.png)
 
 ##### 安裝給所有使用者
-若想安裝給全部的使用者，需要用到 `sudo` 指令提取管理員權限。
+若想安裝給全部的使用者，需要用到 `sudo`{.bash} 指令提取管理員權限。
 
-- 基本上可以安裝在任意目錄底下，但是建議 `/usr/local/aws-cli` 。
-- 安裝程式會自動在 `/usr/local/bin/aws` 建立一個軟連結讓所有使用者取用。
+- 基本上可以安裝在任意目錄底下，但是建議 `/usr/local/aws-cli`{.bash} 。
+- 安裝程式會自動在 `/usr/local/bin/aws`{.bash} 建立一個軟連結讓所有使用者取用。
 
 ##### 只安裝給現在使用者
-若只想安裝給正在使用的使用者雖不須用 `sudo` 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。
+若只想安裝給正在使用的使用者雖不須用 `sudo`{.bash} 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。
 
 - 怎麼知道系統路徑在哪裡？  
-  打開 Termianl.app 輸入 `echo $PATH` ，出現的文字就是在描述系統路徑包含的目錄
+  打開 Termianl.app 輸入 `echo $PATH`{.bash} ，出現的文字就是在描述系統路徑包含的目錄
 - 若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？  
-  用 `sudo` 提昇權限或聯絡你的系統管理員  
+  用 `sudo`{.bash} 提昇權限或聯絡你的系統管理員  
 - 啊要怎麼打軟連結？  
   ```bash
   sudo ln -s /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws
   sudo ln -s /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer 
   ```
-  以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： `/'space splited path'/`）。  
-  尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 `/aws` 跟 `/aws_completer` 不要改）。雖然可以更換，不過 `/usr/local/bin` 是執行檔集中處，放在一起比較好管理。  
-  另外若是有寫入權限的話，最前面的 `sudo` 是可以省略的。  
+  以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： `/'space splited path'/`{.bash}）。  
+  尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 `/aws`{.bash} 跟 `/aws_completer`{.bash} 不要改）。雖然可以更換，不過 `/usr/local/bin`{.bash} 是執行檔集中處，放在一起比較好管理。  
+  另外若是有寫入權限的話，最前面的 `sudo`{.bash} 是可以省略的。  
 
 安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令
 ```bash
 which aws
 aws --version
 ```
-第一個指令的回覆會是軟連結的位置，長的差不多這樣「`/usr/local/bin/aws`」  
+第一個指令的回覆會是軟連結的位置，長的差不多這樣「`/usr/local/bin/aws`{.bash}」  
 並且第二個指令的輸出若類似以下的文字的話就代表這部份成功。
 
-```
+```bash
 aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0
 ```
 
@@ -250,24 +250,24 @@ aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0
 aws configure
 ```
 程式會依序問我們四個問題：身份代碼、密鑰、預設區域，與輸出格式。   
-前三者剛才都準備好了。輸出格式就寫 `json` 就行了， JSON 是個好格式。
+前三者剛才都準備好了。輸出格式就寫 `json`{.bash} 就行了， JSON 是個好格式。
 
-完成後 AWS CLI 會在當前使用者家目錄底下建立一個 `.aws` 目錄，並在裡面產生 `credentials` 及 `config` 文字檔。未來需要改動設定時除了 `aws config` 指令外，編輯這兩個檔案也有同樣的效果。
+完成後 AWS CLI 會在當前使用者家目錄底下建立一個 `.aws`{.bash} 目錄，並在裡面產生 `credentials`{.bash} 及 `config`{.bash} 文字檔。未來需要改動設定時除了 `aws config`{.bash} 指令外，編輯這兩個檔案也有同樣的效果。
 
 ##### 什麼是家目錄？
 使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的目錄則相反。  
 許多軟體都會預設把東西丟在家目錄。
 
-- Windows：位於 `C:\\Users\USERNAME`   
-  在`cmd` 中使用 `echo %USERPROFILE%` 做確認；在 `File Explorer` （平常翻看資料夾那個）中導覽列輸入 `%USERPROFILE%` 直接跳過去。
-- MacOS： 位於 `/Users/USERNAME`  
-  在 Terminal.app 中輸入 `echo $HOME` 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。
+- Windows：位於 `C:\\Users\USERNAME`{.bash}   
+  在`cmd`{.bash} 中使用 `echo %USERPROFILE%`{.bash} 做確認；在 `File Explorer`{.bash} （平常翻看資料夾那個）中導覽列輸入 `%USERPROFILE%`{.bash} 直接跳過去。
+- MacOS： 位於 `/Users/USERNAME`{.bash}  
+  在 Terminal.app 中輸入 `echo $HOME`{.bash} 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。
 
 
 ## 三、安裝 boto 套件
 [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html)   
 
-`boto` 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。
+`boto`{.bash} 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。
 
 ##### 什麼是 API ？
 應用程式介面（ Application Programming Interface, API ）。  
@@ -282,10 +282,11 @@ conda install -c anaconda boto
 ```
 
 ## 四、複製貼上
-[參考頁面](https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html)   
+[參考頁面 — 本機圖片物件辨識](https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html)   
+[參考頁面 — 人臉偵測](https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html)
 
-將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 `boto3` 套件的環境下執行。  
-記得 `photo = 'photo'` 的字串 `'photo'` 改成你的圖片所在路徑。
+將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 `boto3`{.bash} 套件的環境下執行。  
+記得 `photo = 'photo'`{.python} 的字串 `'photo'`{.python} 改成你的圖片所在路徑。
 
 ```{#codeExample .python .numberLines}
 #Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -328,40 +329,40 @@ if __name__ == "__main__":
 
 由於 Python 是利用縮排來辨別程式區塊，我們先從縮排為 $0$ 的三個部份開始講解。
 
-- 第 $4$、$5$ 行 — `import xxx`   
-  模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 [`boto3`][boto3] 與 [`json`][json] 模組。`boto3` 不匯入就不能簡單使用 AWS ；`json` 在這裡的作用是讓輸出規則化。  
+- 第 $4$、$5$ 行 — `import xxx`{.python}   
+  模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 [`boto3`{.python}][boto3] 與 [`json`{.python}][json] 模組。`boto3`{.python} 不匯入就不能簡單使用 AWS ；`json`{.python} 在這裡的作用是讓輸出規則化。  
 
-- 第 $7$ 與 $28$ 行 — `def detect_faces_local_file(photo):` 與 `def main():`   
-  自定義[函式][func]。`main` 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。`detect_faces_local_file` 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。   
+- 第 $7$ 與 $28$ 行 — `def detect_faces_local_file(photo):`{.python} 與 `def main():`{.python}   
+  自定義[函式][func]。`main`{.python} 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。`detect_faces_local_file`{.python} 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。   
   函式之下的區塊會在被呼叫時執行。由於 Python 不使用括弧，而是使用縮排來定義每個區塊。造就相對於其他語言更一致且簡潔的文件風格，但相對的一個小小的、看不見的空白也能毀掉你的程式碼。
 
-- 第 $35$ 行 — `if __name__ == "__main__":`   
+- 第 $35$ 行 — `if __name__ == "__main__":`{.python}   
   表示以下的區塊只有這份文件（ \_\_name\_\_ ）正是當前執行的 script （ \_\_main\_\_ ）時才會被執行。  
   這區塊的存在是在防止這份文件作為模組被其他文件匯入（ import ）時[發生意外狀況][1]。  
-  由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 `main()` 這個函式。 
+  由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 `main()`{.python} 這個函式。 
 
 再來我們來看兩個函式的內容。
 
-`main` 的內容只有三行，它首先把圖片[路徑][path]存入 `photo` 這個變數中，再來以 `photo` 為參數呼叫 `detect_faces_local_file` 這個函式，並把回傳值存入 `label_count` ，最後印出一行字。
+`main`{.python} 的內容只有三行，它首先把圖片[路徑][path]存入 `photo`{.python} 這個變數中，再來以 `photo`{.python} 為參數呼叫 `detect_faces_local_file`{.python} 這個函式，並把回傳值存入 `label_count`{.python} ，最後印出一行字。
 
-最後才是重頭戲— `detect_faces_local_file` 函式
+最後才是重頭戲— `detect_faces_local_file`{.python} 函式
 
-- 第 $8$ 行利用 [`boto3.client`][client] 這個方法將 [Amazon Rekognition 的 low-level client][rekclient] （ `Rekognition.Client` 類別）存入 `client` 變數
+- 第 $8$ 行利用 [`boto3.client`{.python}][client] 這個方法將 [Amazon Rekognition 的 low-level client][rekclient] （ `Rekognition.Client`{.python} 類別）存入 `client`{.python} 變數
 
-- 第 $10$ 行使用 [`with`][with] 陳述句將變數 `photo` 這個路徑記載的檔案利用 [`open`][open] 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 `image`
+- 第 $10$ 行使用 [`with`{.python}][with] 陳述句將變數 `photo`{.python} 這個路徑記載的檔案利用 [`open`{.python}][open] 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 `image`{.python}
 
-- 第 $11$ 行呼叫 [`detect_faces`][detect] 方法並將結果存入 `response` 變數   
+- 第 $11$ 行呼叫 [`detect_faces`{.python}][detect] 方法並將結果存入 `response`{.python} 變數   
 
-- 第 $13$ 行利用 [for 陳述句][for]迭代 `response` 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 `faceDetail` 並執行底下的區塊。  
-  這裡得提一下，`delete_faces` 方法的回傳值是個[字典][dict]。
-- 第 $18$ 行利用 `json` 模組的 `dumps` 函式將 `faceDetail` 轉換成格式為 JSON 的字串，並打印出來。
+- 第 $13$ 行利用 [for 陳述句][for]迭代 `response`{.python} 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 `faceDetail`{.python} 並執行底下的區塊。  
+  這裡得提一下，`delete_faces`{.python} 方法的回傳值是個[字典][dict]。
+- 第 $18$ 行利用 `json`{.python} 模組的 `dumps`{.python} 函式將 `faceDetail`{.python} 轉換成格式為 JSON 的字串，並打印出來。
 
-- 第 $26$ 行出現 `return` 陳述句。回傳 `response` 裡鍵為 `FaceDetails` 的值的數量。
-  執行 `return` 陳述句必定會結束函式，並同時令函式回傳接在 `return` 後面的運算結果。
+- 第 $26$ 行出現 `return`{.python} 陳述句。回傳 `response`{.python} 裡鍵為 `FaceDetails`{.python} 的值的數量。
+  執行 `return`{.python} 陳述句必定會結束函式，並同時令函式回傳接在 `return`{.python} 後面的運算結果。
 
 以上就是這份文件所執行的內容。除去打印、匯入、函式定義，以及主程式區塊外，我們事實上只有做三件事：  
 
-1. 建立 `Rekognition.Client` 物件 — 第 $8$ 行
+1. 建立 `Rekognition.Client`{.python} 物件 — 第 $8$ 行
 1. 送出請求 — 第 $10$ 與第 $11$ 行
 1. 處理回傳值 — 第 $13$ 與第 $18$ 行
 
@@ -392,6 +393,6 @@ if __name__ == "__main__":
 
 接著注意某些伺服器並沒有提供某些服務，所以我們選擇 us-east-1 地區。 
 
-最後在我們的 Python 開發環境下安裝 `boto3` 套件。  
+最後在我們的 Python 開發環境下安裝 `boto3`{.python} 套件。  
 
 以上條件湊齊後我們跟 AWS Rekognition 的線就接通了！用第四節的程式碼進行第一次雲端辨識吧！

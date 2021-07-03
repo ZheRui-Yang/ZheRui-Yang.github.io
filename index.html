@@ -63,7 +63,7 @@
 <li>資源管理<br />
 也許根帳號是公司的，你不會想看到坐你旁邊，負責撰寫人臉辨識的小明拿公司資源做論壇輿情分析找出最受好評的番號。</li>
 </ul>
-<p>若以上兩點還不能說服你，那至少亞馬遜官方強迫你要有。</p>
+<p>若以上兩點還不能說服你，那至少亞馬遜官方希望你要有。</p>
 <p>當然，IAM 使用者也需要一個管理者。這位管理者也就是我們現在要建立的 IAM 使用者管理者。</p>
 </section>
 <section id="建立" class="level5">
@@ -123,7 +123,7 @@
 <figure>
 <img src="./media/searchiam.png" alt="直接搜尋長這樣" /><figcaption aria-hidden="true">直接搜尋長這樣</figcaption>
 </figure>
-<p>在 IAM 管理頁面上選擇 Users ，也就是我們建立新使用者的地方。接著點選熱騰騰的新使用者 ，來到這個畫面點「 add permission 」</p>
+<p>在 IAM 管理頁面上選擇 Users ，也就是我們建立新使用者的地方。接著點選熱騰騰的新使用者 ，來到這個畫面點「 add permissions 」</p>
 <figure>
 <img src="./media/addpermision.png" alt="藍色大大的按鈕" /><figcaption aria-hidden="true">藍色大大的按鈕</figcaption>
 </figure>
@@ -178,7 +178,7 @@
 <p>安裝程式結束後，在開始選單內搜尋「 cmd 」，開啟後輸入</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
 <p>若有跳出類似以下的文字的話就代表這部份成功。</p>
-<pre><code>aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws-cli/2.1.29</span> Python/3.7.4 Windows/10 botocore/2.0.0</span></code></pre></div>
 <p>解除安裝說明也在同一頁面上，可以參考。</p>
 </section>
 <section id="macos" class="level5">
@@ -190,34 +190,34 @@
 </figure>
 <section id="安裝給所有使用者" class="level6">
 <h6>安裝給所有使用者</h6>
-<p>若想安裝給全部的使用者，需要用到 <code>sudo</code> 指令提取管理員權限。</p>
+<p>若想安裝給全部的使用者，需要用到 <code class="sourceCode bash"><span class="fu">sudo</span></code> 指令提取管理員權限。</p>
 <ul>
-<li>基本上可以安裝在任意目錄底下，但是建議 <code>/usr/local/aws-cli</code> 。</li>
-<li>安裝程式會自動在 <code>/usr/local/bin/aws</code> 建立一個軟連結讓所有使用者取用。</li>
+<li>基本上可以安裝在任意目錄底下，但是建議 <code class="sourceCode bash"><span class="ex">/usr/local/aws-cli</span></code> 。</li>
+<li>安裝程式會自動在 <code class="sourceCode bash"><span class="ex">/usr/local/bin/aws</span></code> 建立一個軟連結讓所有使用者取用。</li>
 </ul>
 </section>
 <section id="只安裝給現在使用者" class="level6">
 <h6>只安裝給現在使用者</h6>
-<p>若只想安裝給正在使用的使用者雖不須用 <code>sudo</code> 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。</p>
+<p>若只想安裝給正在使用的使用者雖不須用 <code class="sourceCode bash"><span class="fu">sudo</span></code> 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。</p>
 <ul>
 <li><p>怎麼知道系統路徑在哪裡？<br />
-打開 Termianl.app 輸入 <code>echo $PATH</code> ，出現的文字就是在描述系統路徑包含的目錄</p></li>
+打開 Termianl.app 輸入 <code class="sourceCode bash"><span class="bu">echo</span> <span class="va">$PATH</span></code> ，出現的文字就是在描述系統路徑包含的目錄</p></li>
 <li><p>若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？<br />
-用 <code>sudo</code> 提昇權限或聯絡你的系統管理員<br />
+用 <code class="sourceCode bash"><span class="fu">sudo</span></code> 提昇權限或聯絡你的系統管理員<br />
 </p></li>
 <li><p>啊要怎麼打軟連結？</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer </span></code></pre></div>
-<p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： <code>/'space splited path'/</code>）。<br />
-尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code>/aws</code> 跟 <code>/aws_completer</code> 不要改）。雖然可以更換，不過 <code>/usr/local/bin</code> 是執行檔集中處，放在一起比較好管理。<br />
-另外若是有寫入權限的話，最前面的 <code>sudo</code> 是可以省略的。</p></li>
+<p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： <code class="sourceCode bash"><span class="ex">/</span><span class="st">&#39;space splited path&#39;</span><span class="ex">/</span></code>）。<br />
+尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code class="sourceCode bash"><span class="ex">/aws</span></code> 跟 <code class="sourceCode bash"><span class="ex">/aws_completer</span></code> 不要改）。雖然可以更換，不過 <code class="sourceCode bash"><span class="ex">/usr/local/bin</span></code> 是執行檔集中處，放在一起比較好管理。<br />
+另外若是有寫入權限的話，最前面的 <code class="sourceCode bash"><span class="fu">sudo</span></code> 是可以省略的。</p></li>
 </ul>
 <p>安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> aws</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
-<p>第一個指令的回覆會是軟連結的位置，長的差不多這樣「<code>/usr/local/bin/aws</code>」<br />
+<p>第一個指令的回覆會是軟連結的位置，長的差不多這樣「<code class="sourceCode bash"><span class="ex">/usr/local/bin/aws</span></code>」<br />
 並且第二個指令的輸出若類似以下的文字的話就代表這部份成功。</p>
-<pre><code>aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws-cli/2.1.29</span> Python/3.7.4 Windows/10 botocore/2.0.0</span></code></pre></div>
 <p>解除安裝說明也在同一頁面上，可以參考。</p>
 </section>
 </section>
@@ -253,17 +253,17 @@
 <p>打開你的終端機（ cmd, Terminal.app, …etc ）輸入以下指令</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> configure</span></code></pre></div>
 <p>程式會依序問我們四個問題：身份代碼、密鑰、預設區域，與輸出格式。<br />
-前三者剛才都準備好了。輸出格式就寫 <code>json</code> 就行了， JSON 是個好格式。</p>
-<p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code>.aws</code> 目錄，並在裡面產生 <code>credentials</code> 及 <code>config</code> 文字檔。未來需要改動設定時除了 <code>aws config</code> 指令外，編輯這兩個檔案也有同樣的效果。</p>
+前三者剛才都準備好了。輸出格式就寫 <code class="sourceCode bash"><span class="ex">json</span></code> 就行了， JSON 是個好格式。</p>
+<p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code class="sourceCode bash"><span class="ex">.aws</span></code> 目錄，並在裡面產生 <code class="sourceCode bash"><span class="ex">credentials</span></code> 及 <code class="sourceCode bash"><span class="ex">config</span></code> 文字檔。未來需要改動設定時除了 <code class="sourceCode bash"><span class="ex">aws</span> config</code> 指令外，編輯這兩個檔案也有同樣的效果。</p>
 <section id="什麼是家目錄" class="level6">
 <h6>什麼是家目錄？</h6>
 <p>使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的目錄則相反。<br />
 許多軟體都會預設把東西丟在家目錄。</p>
 <ul>
-<li>Windows：位於 <code>C:\\Users\USERNAME</code><br />
-在<code>cmd</code> 中使用 <code>echo %USERPROFILE%</code> 做確認；在 <code>File Explorer</code> （平常翻看資料夾那個）中導覽列輸入 <code>%USERPROFILE%</code> 直接跳過去。</li>
-<li>MacOS： 位於 <code>/Users/USERNAME</code><br />
-在 Terminal.app 中輸入 <code>echo $HOME</code> 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。</li>
+<li>Windows：位於 <code class="sourceCode bash"><span class="ex">C:\\Users\USERNAME</span></code><br />
+在<code class="sourceCode bash"><span class="ex">cmd</span></code> 中使用 <code class="sourceCode bash"><span class="bu">echo</span> %USERPROFILE%</code> 做確認；在 <code class="sourceCode bash"><span class="ex">File</span> Explorer</code> （平常翻看資料夾那個）中導覽列輸入 <code class="sourceCode bash"><span class="ex">%USERPROFILE%</span></code> 直接跳過去。</li>
+<li>MacOS： 位於 <code class="sourceCode bash"><span class="ex">/Users/USERNAME</span></code><br />
+在 Terminal.app 中輸入 <code class="sourceCode bash"><span class="bu">echo</span> <span class="va">$HOME</span></code> 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。</li>
 </ul>
 </section>
 </section>
@@ -272,7 +272,7 @@
 <section id="三安裝-boto-套件" class="level3">
 <h3>三、安裝 boto 套件</h3>
 <p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html">Boto3 Documentation</a></p>
-<p><code>boto</code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。</p>
+<p><code class="sourceCode bash"><span class="ex">boto</span></code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。</p>
 <section id="什麼是-api" class="level6">
 <h6>什麼是 API ？</h6>
 <p>應用程式介面（ Application Programming Interface, API ）。</p>
@@ -287,9 +287,10 @@
 </section>
 <section id="四複製貼上" class="level3">
 <h3>四、複製貼上</h3>
-<p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html">參考頁面</a></p>
-<p>將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 <code>boto3</code> 套件的環境下執行。<br />
-記得 <code>photo = 'photo'</code> 的字串 <code>'photo'</code> 改成你的圖片所在路徑。</p>
+<p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html">參考頁面 — 本機圖片物件辨識</a><br />
+<a href="https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html">參考頁面 — 人臉偵測</a></p>
+<p>將以下程式碼存成 .py 檔（ 或是貼到 Spyder ），在有 <code class="sourceCode bash"><span class="ex">boto3</span></code> 套件的環境下執行。<br />
+記得 <code class="sourceCode python">photo <span class="op">=</span> <span class="st">&#39;photo&#39;</span></code> 的字串 <code class="sourceCode python"><span class="co">&#39;photo&#39;</span></code> 改成你的圖片所在路徑。</p>
 <div class="sourceCode" id="codeExample"><pre class="sourceCode numberSource python numberLines"><code class="sourceCode python"><span id="codeExample-1"><a href="#codeExample-1"></a><span class="co">#Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.</span></span>
 <span id="codeExample-2"><a href="#codeExample-2"></a><span class="co">#PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)</span></span>
 <span id="codeExample-3"><a href="#codeExample-3"></a></span>
@@ -328,31 +329,31 @@
 <span id="codeExample-36"><a href="#codeExample-36"></a>    main()</span></code></pre></div>
 <p>由於 Python 是利用縮排來辨別程式區塊，我們先從縮排為 <span class="math inline">\(0\)</span> 的三個部份開始講解。</p>
 <ul>
-<li><p>第 <span class="math inline">\(4\)</span>、<span class="math inline">\(5\)</span> 行 — <code>import xxx</code><br />
-模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"><code>boto3</code></a> 與 <a href="https://docs.python.org/3/library/json.html"><code>json</code></a> 模組。<code>boto3</code> 不匯入就不能簡單使用 AWS ；<code>json</code> 在這裡的作用是讓輸出規則化。</p></li>
-<li><p>第 <span class="math inline">\(7\)</span> 與 <span class="math inline">\(28\)</span> 行 — <code>def detect_faces_local_file(photo):</code> 與 <code>def main():</code><br />
-自定義<a href="https://shengyu7697.github.io/python-function/">函式</a>。<code>main</code> 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。<code>detect_faces_local_file</code> 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。<br />
+<li><p>第 <span class="math inline">\(4\)</span>、<span class="math inline">\(5\)</span> 行 — <code class="sourceCode python"><span class="im">import</span> xxx</code><br />
+模組、套件匯入。匯入這個動作就是跟 Python 直譯器說「把這份文件當作我寫在這裡」。模組和套件是別人寫好的工具組，將本來相當複雜的東西包裝成簡單的形式供人使用。這裡我們匯入的是 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"><code class="sourceCode python">boto3</code></a> 與 <a href="https://docs.python.org/3/library/json.html"><code class="sourceCode python">json</code></a> 模組。<code class="sourceCode python">boto3</code> 不匯入就不能簡單使用 AWS ；<code class="sourceCode python">json</code> 在這裡的作用是讓輸出規則化。</p></li>
+<li><p>第 <span class="math inline">\(7\)</span> 與 <span class="math inline">\(28\)</span> 行 — <code class="sourceCode python"><span class="kw">def</span> detect_faces_local_file(photo):</code> 與 <code class="sourceCode python"><span class="kw">def</span> main():</code><br />
+自定義<a href="https://shengyu7697.github.io/python-function/">函式</a>。<code class="sourceCode python">main</code> 是主程式，把主程式定義成這個名字是 C++ 留下來的習慣，不強制。<code class="sourceCode python">detect_faces_local_file</code> 則是把所有包含 AWS 的操作都放在一起，並為未來其他區塊提供一個簡潔的介面。<br />
 函式之下的區塊會在被呼叫時執行。由於 Python 不使用括弧，而是使用縮排來定義每個區塊。造就相對於其他語言更一致且簡潔的文件風格，但相對的一個小小的、看不見的空白也能毀掉你的程式碼。</p></li>
-<li><p>第 <span class="math inline">\(35\)</span> 行 — <code>if __name__ == "__main__":</code><br />
+<li><p>第 <span class="math inline">\(35\)</span> 行 — <code class="sourceCode python"><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</code><br />
 表示以下的區塊只有這份文件（ __name__ ）正是當前執行的 script （ __main__ ）時才會被執行。<br />
 這區塊的存在是在防止這份文件作為模組被其他文件匯入（ import ）時<a href="http://blog.castman.net/%E6%95%99%E5%AD%B8/2018/01/27/python-name-main.html">發生意外狀況</a>。<br />
-由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 <code>main()</code> 這個函式。</p></li>
+由於這份文件其他的地方只有匯入陳述句與函式定義，直接執行時就只會執行 <code class="sourceCode python">main()</code> 這個函式。</p></li>
 </ul>
 <p>再來我們來看兩個函式的內容。</p>
-<p><code>main</code> 的內容只有三行，它首先把圖片<a href="https://zh.wikipedia.org/zh-tw/%E8%B7%AF%E5%BE%84_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">路徑</a>存入 <code>photo</code> 這個變數中，再來以 <code>photo</code> 為參數呼叫 <code>detect_faces_local_file</code> 這個函式，並把回傳值存入 <code>label_count</code> ，最後印出一行字。</p>
-<p>最後才是重頭戲— <code>detect_faces_local_file</code> 函式</p>
+<p><code class="sourceCode python">main</code> 的內容只有三行，它首先把圖片<a href="https://zh.wikipedia.org/zh-tw/%E8%B7%AF%E5%BE%84_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">路徑</a>存入 <code class="sourceCode python">photo</code> 這個變數中，再來以 <code class="sourceCode python">photo</code> 為參數呼叫 <code class="sourceCode python">detect_faces_local_file</code> 這個函式，並把回傳值存入 <code class="sourceCode python">label_count</code> ，最後印出一行字。</p>
+<p>最後才是重頭戲— <code class="sourceCode python">detect_faces_local_file</code> 函式</p>
 <ul>
-<li><p>第 <span class="math inline">\(8\)</span> 行利用 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.client"><code>boto3.client</code></a> 這個方法將 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#client">Amazon Rekognition 的 low-level client</a> （ <code>Rekognition.Client</code> 類別）存入 <code>client</code> 變數</p></li>
-<li><p>第 <span class="math inline">\(10\)</span> 行使用 <a href="https://www.geeksforgeeks.org/with-statement-in-python/"><code>with</code></a> 陳述句將變數 <code>photo</code> 這個路徑記載的檔案利用 <a href="https://docs.python.org/3/library/functions.html#open"><code>open</code></a> 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 <code>image</code></p></li>
-<li><p>第 <span class="math inline">\(11\)</span> 行呼叫 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#Rekognition.Client.delete_faces"><code>detect_faces</code></a> 方法並將結果存入 <code>response</code> 變數</p></li>
-<li><p>第 <span class="math inline">\(13\)</span> 行利用 <a href="https://docs.python.org/zh-tw/3/tutorial/controlflow.html#for-statements">for 陳述句</a>迭代 <code>response</code> 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 <code>faceDetail</code> 並執行底下的區塊。<br />
-這裡得提一下，<code>delete_faces</code> 方法的回傳值是個<a href="https://docs.python.org/zh-tw/3/tutorial/datastructures.html?highlight=%E5%AD%97%E5%85%B8#dictionaries">字典</a>。</p></li>
-<li><p>第 <span class="math inline">\(18\)</span> 行利用 <code>json</code> 模組的 <code>dumps</code> 函式將 <code>faceDetail</code> 轉換成格式為 JSON 的字串，並打印出來。</p></li>
-<li><p>第 <span class="math inline">\(26\)</span> 行出現 <code>return</code> 陳述句。回傳 <code>response</code> 裡鍵為 <code>FaceDetails</code> 的值的數量。 執行 <code>return</code> 陳述句必定會結束函式，並同時令函式回傳接在 <code>return</code> 後面的運算結果。</p></li>
+<li><p>第 <span class="math inline">\(8\)</span> 行利用 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.client"><code class="sourceCode python">boto3.client</code></a> 這個方法將 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#client">Amazon Rekognition 的 low-level client</a> （ <code class="sourceCode python">Rekognition.Client</code> 類別）存入 <code class="sourceCode python">client</code> 變數</p></li>
+<li><p>第 <span class="math inline">\(10\)</span> 行使用 <a href="https://www.geeksforgeeks.org/with-statement-in-python/"><code class="sourceCode python"><span class="cf">with</span></code></a> 陳述句將變數 <code class="sourceCode python">photo</code> 這個路徑記載的檔案利用 <a href="https://docs.python.org/3/library/functions.html#open"><code class="sourceCode python"><span class="bu">open</span></code></a> 以「唯讀」、「以二進位字元讀入」的方式打開，並存成變數 <code class="sourceCode python">image</code></p></li>
+<li><p>第 <span class="math inline">\(11\)</span> 行呼叫 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#Rekognition.Client.delete_faces"><code class="sourceCode python">detect_faces</code></a> 方法並將結果存入 <code class="sourceCode python">response</code> 變數</p></li>
+<li><p>第 <span class="math inline">\(13\)</span> 行利用 <a href="https://docs.python.org/zh-tw/3/tutorial/controlflow.html#for-statements">for 陳述句</a>迭代 <code class="sourceCode python">response</code> 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 <code class="sourceCode python">faceDetail</code> 並執行底下的區塊。<br />
+這裡得提一下，<code class="sourceCode python">delete_faces</code> 方法的回傳值是個<a href="https://docs.python.org/zh-tw/3/tutorial/datastructures.html?highlight=%E5%AD%97%E5%85%B8#dictionaries">字典</a>。</p></li>
+<li><p>第 <span class="math inline">\(18\)</span> 行利用 <code class="sourceCode python">json</code> 模組的 <code class="sourceCode python">dumps</code> 函式將 <code class="sourceCode python">faceDetail</code> 轉換成格式為 JSON 的字串，並打印出來。</p></li>
+<li><p>第 <span class="math inline">\(26\)</span> 行出現 <code class="sourceCode python"><span class="cf">return</span></code> 陳述句。回傳 <code class="sourceCode python">response</code> 裡鍵為 <code class="sourceCode python">FaceDetails</code> 的值的數量。 執行 <code class="sourceCode python"><span class="cf">return</span></code> 陳述句必定會結束函式，並同時令函式回傳接在 <code class="sourceCode python"><span class="cf">return</span></code> 後面的運算結果。</p></li>
 </ul>
 <p>以上就是這份文件所執行的內容。除去打印、匯入、函式定義，以及主程式區塊外，我們事實上只有做三件事：</p>
 <ol type="1">
-<li>建立 <code>Rekognition.Client</code> 物件 — 第 <span class="math inline">\(8\)</span> 行</li>
+<li>建立 <code class="sourceCode python">Rekognition.Client</code> 物件 — 第 <span class="math inline">\(8\)</span> 行</li>
 <li>送出請求 — 第 <span class="math inline">\(10\)</span> 與第 <span class="math inline">\(11\)</span> 行</li>
 <li>處理回傳值 — 第 <span class="math inline">\(13\)</span> 與第 <span class="math inline">\(18\)</span> 行</li>
 </ol>
@@ -364,7 +365,7 @@
 <p>我們需要一個 IAM 使用者的身份來讓 AWS 伺服器認識我們，從主控台取得身份代碼與密鑰來讓本地端的開發者套件能夠使用我們的 IAM 身份。</p>
 <p>同時我們也需要給予該使用者 AmazonRekognitionFullAccess 與 AmazonS3ReadOnlyAccess 兩樣授權才足以利用這項雲端服務。</p>
 <p>接著注意某些伺服器並沒有提供某些服務，所以我們選擇 us-east-1 地區。</p>
-<p>最後在我們的 Python 開發環境下安裝 <code>boto3</code> 套件。</p>
+<p>最後在我們的 Python 開發環境下安裝 <code class="sourceCode python">boto3</code> 套件。</p>
 <p>以上條件湊齊後我們跟 AWS Rekognition 的線就接通了！用第四節的程式碼進行第一次雲端辨識吧！</p>
 </section>
 </section>
