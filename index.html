@@ -5,14 +5,14 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Zhe-Rui, Yang" />
-  <title>猴子也能懂的 AWS Rekognition 雲端圖片辨識</title>
+  <title>猴子也能懂的 AWS Rekognition 雲端人臉辨識</title>
   <link rel="stylesheet" href="./css/aws-rek.css" />
   <link rel="stylesheet" href="./css/aws-rek.css" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">猴子也能懂的 AWS Rekognition 雲端圖片辨識</h1>
+<h1 class="title">猴子也能懂的 AWS Rekognition 雲端人臉辨識</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">Contents</h2>
@@ -53,8 +53,9 @@
 <h4>創建 IAM 使用者管理者</h4>
 <p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html">亞馬遜說明頁面</a></p>
 <p>說明頁面第一部份是利用網頁主控台創建新使用者，也就是我們會使用的方式。第二部份利用指令列工具創建使用者這裡略過不提。</p>
-<section id="為什麼需要創建-iam-使用者" class="level5">
-<h5>為什麼需要創建 IAM 使用者？</h5>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">為什麼需要創建 IAM 使用者？</summary>
 <p>簡而言之：安全性、以及資源管理。</p>
 <ul>
 <li>安全性<br />
@@ -65,7 +66,7 @@
 </ul>
 <p>若以上兩點還不能說服你，那至少亞馬遜官方希望你要有。</p>
 <p>當然，IAM 使用者也需要一個管理者。這位管理者也就是我們現在要建立的 IAM 使用者管理者。</p>
-</section>
+</details>
 <section id="建立" class="level5">
 <h5>建立</h5>
 <p>點進上面的說明頁面，往下拉會看到「 Creating an administrator IAM user and user group (console) 」 這個標籤下方有「 Sign in to the IAM console 」的超連結。</p>
@@ -145,17 +146,17 @@
 <h3>二、建立亞馬遜指令列環境與標準開發者套件</h3>
 <p><a href="https://docs.aws.amazon.com/rekognition/latest/dg/setup-awscli-sdk.html">說明頁面</a></p>
 <p>說明頁面給了指令列環境的安裝說明超連結以及安裝後的設定。安裝後的設定是指「在指令列（本機）使用剛剛創建好的使用者身份」以及指定使用哪個伺服器。</p>
-<section id="指令列環境與標準開發者套件是什麼" class="level4">
-<h4>指令列環境與標準開發者套件是什麼？</h4>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">指令列環境與標準開發者套件是什麼？</summary>
 <ul>
-<li>指令列環境（ command line interface, CLI ）<br />
+<li><p>指令列環境（ command line interface, CLI ）<br />
 是指利用文字與電腦溝通的人—機介面。例如：Microdoft Windows 的 cmd 、powershell；MacOS 的 Termianl.app。<br />
 總之是一些黑黑的、上面字密密麻麻的，會用的人都長的很像駭客的東西。<br />
-噢！對了！ Spyder 裡的 IPython shell （右下角那個）也是這個東東。<br />
-</li>
-<li>標準開發套件（ standard developer kit, SDK ） 是軟體服務提供者方便下游軟體開發者加速開發的一組工具。</li>
+噢！對了！ Spyder 裡的 IPython shell （右下角那個）也是這個東東。</p></li>
+<li><p>標準開發套件（ standard developer kit, SDK ） 是軟體服務提供者方便下游軟體開發者加速開發的一組工具。</p></li>
 </ul>
-</section>
+</details>
 <section id="下載及安裝" class="level4">
 <h4>下載及安裝</h4>
 <p>說明頁面的這裡是下載及安裝超連結</p>
@@ -199,19 +200,25 @@
 <section id="只安裝給現在使用者" class="level6">
 <h6>只安裝給現在使用者</h6>
 <p>若只想安裝給正在使用的使用者雖不須用 <code class="sourceCode bash"><span class="fu">sudo</span></code> 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。</p>
-<ul>
-<li><p>怎麼知道系統路徑在哪裡？<br />
-打開 Termianl.app 輸入 <code class="sourceCode bash"><span class="bu">echo</span> <span class="va">$PATH</span></code> ，出現的文字就是在描述系統路徑包含的目錄</p></li>
-<li><p>若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？<br />
-用 <code class="sourceCode bash"><span class="fu">sudo</span></code> 提昇權限或聯絡你的系統管理員<br />
-</p></li>
-<li><p>啊要怎麼打軟連結？</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer </span></code></pre></div>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">怎麼知道系統路徑在哪裡？  </summary>
+<p>打開 Termianl.app 輸入 <code class="sourceCode bash"><span class="bu">echo</span> <span class="va">$PATH</span></code> ，出現的文字就是在描述系統路徑包含的目錄</p>
+</details>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？  </summary>
+<p>用 <code class="sourceCode bash"><span class="fu">sudo</span></code> 提昇權限或聯絡你的系統管理員</p>
+</details>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">啊要怎麼打軟連結？  </summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> ln <span class="at">-s</span> /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer </span></code></pre></div>
 <p>以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： <code class="sourceCode bash"><span class="ex">/</span><span class="st">&#39;space splited path&#39;</span><span class="ex">/</span></code>）。<br />
 尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 <code class="sourceCode bash"><span class="ex">/aws</span></code> 跟 <code class="sourceCode bash"><span class="ex">/aws_completer</span></code> 不要改）。雖然可以更換，不過 <code class="sourceCode bash"><span class="ex">/usr/local/bin</span></code> 是執行檔集中處，放在一起比較好管理。<br />
-另外若是有寫入權限的話，最前面的 <code class="sourceCode bash"><span class="fu">sudo</span></code> 是可以省略的。</p></li>
-</ul>
+另外若是有寫入權限的話，最前面的 <code class="sourceCode bash"><span class="fu">sudo</span></code> 是可以省略的。</p>
+</details>
 <p>安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> aws</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> <span class="at">--version</span></span></code></pre></div>
@@ -219,11 +226,12 @@
 並且第二個指令的輸出若類似以下的文字的話就代表這部份成功。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws-cli/2.1.29</span> Python/3.7.4 Windows/10 botocore/2.0.0</span></code></pre></div>
 <p>解除安裝說明也在同一頁面上，可以參考。</p>
-</section>
-</section>
-<section id="linux-與-docker" class="level5">
-<h5>Linux 與 Docker</h5>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">Linux 與 Docker</summary>
 <p>你認真？這份文件不是為會用這兩者之一的你準備的。</p>
+</details>
+</section>
 </section>
 </section>
 <section id="設定本地端-aws-cli-身份與地區" class="level4">
@@ -253,10 +261,11 @@
 <p>打開你的終端機（ cmd, Terminal.app, …etc ）輸入以下指令</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aws</span> configure</span></code></pre></div>
 <p>程式會依序問我們四個問題：身份代碼、密鑰、預設區域，與輸出格式。<br />
-前三者剛才都準備好了。輸出格式就寫 <code class="sourceCode bash"><span class="ex">json</span></code> 就行了， JSON 是個好格式。</p>
+前三者剛才都準備好了。輸出格式就寫 <code class="sourceCode bash"><span class="ex">json</span></code> 就行了， <a href="https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects/JSON">JSON</a> 是個好格式。</p>
 <p>完成後 AWS CLI 會在當前使用者家目錄底下建立一個 <code class="sourceCode bash"><span class="ex">.aws</span></code> 目錄，並在裡面產生 <code class="sourceCode bash"><span class="ex">credentials</span></code> 及 <code class="sourceCode bash"><span class="ex">config</span></code> 文字檔。未來需要改動設定時除了 <code class="sourceCode bash"><span class="ex">aws</span> config</code> 指令外，編輯這兩個檔案也有同樣的效果。</p>
-<section id="什麼是家目錄" class="level6">
-<h6>什麼是家目錄？</h6>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">什麼是家目錄？</summary>
 <p>使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的目錄則相反。<br />
 許多軟體都會預設把東西丟在家目錄。</p>
 <ul>
@@ -265,7 +274,7 @@
 <li>MacOS： 位於 <code class="sourceCode bash"><span class="ex">/Users/USERNAME</span></code><br />
 在 Terminal.app 中輸入 <code class="sourceCode bash"><span class="bu">echo</span> <span class="va">$HOME</span></code> 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。</li>
 </ul>
-</section>
+</details>
 </section>
 </section>
 </section>
@@ -273,12 +282,13 @@
 <h3>三、安裝 boto 套件</h3>
 <p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html">Boto3 Documentation</a></p>
 <p><code class="sourceCode bash"><span class="ex">boto</span></code> 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。</p>
-<section id="什麼是-api" class="level6">
-<h6>什麼是 API ？</h6>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">什麼是 API ？</summary>
 <p>應用程式介面（ Application Programming Interface, API ）。</p>
 <p>算是蠻抽象的概念，泛指任何應用程式與另一個應用程式互動的介面。<br />
 以硬體舉例來說：桌上型電腦（程式 A ）的鍵盤（程式 B ）可能需要透過 USB 、PCI ，或是藍芽連接上電腦。這時我們稱他們連接的方式為 API 。</p>
-</section>
+</details>
 <section id="anaconda" class="level4">
 <h4>Anaconda</h4>
 <p>若有分割虛擬環境就進入虛擬環境。</p>
@@ -348,7 +358,7 @@
 <li><p>第 <span class="math inline">\(11\)</span> 行呼叫 <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/rekognition.html#Rekognition.Client.delete_faces"><code class="sourceCode python">detect_faces</code></a> 方法並將結果存入 <code class="sourceCode python">response</code> 變數</p></li>
 <li><p>第 <span class="math inline">\(13\)</span> 行利用 <a href="https://docs.python.org/zh-tw/3/tutorial/controlflow.html#for-statements">for 陳述句</a>迭代 <code class="sourceCode python">response</code> 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 <code class="sourceCode python">faceDetail</code> 並執行底下的區塊。<br />
 這裡得提一下，<code class="sourceCode python">delete_faces</code> 方法的回傳值是個<a href="https://docs.python.org/zh-tw/3/tutorial/datastructures.html?highlight=%E5%AD%97%E5%85%B8#dictionaries">字典</a>。</p></li>
-<li><p>第 <span class="math inline">\(18\)</span> 行利用 <code class="sourceCode python">json</code> 模組的 <code class="sourceCode python">dumps</code> 函式將 <code class="sourceCode python">faceDetail</code> 轉換成格式為 JSON 的字串，並打印出來。</p></li>
+<li><p>第 <span class="math inline">\(18\)</span> 行利用 <code class="sourceCode python">json</code> 模組的 <code class="sourceCode python">dumps</code> 函式將 <code class="sourceCode python">faceDetail</code> 轉換成格式為 <a href="https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects/JSON">JSON</a> 的字串，並打印出來。</p></li>
 <li><p>第 <span class="math inline">\(26\)</span> 行出現 <code class="sourceCode python"><span class="cf">return</span></code> 陳述句。回傳 <code class="sourceCode python">response</code> 裡鍵為 <code class="sourceCode python">FaceDetails</code> 的值的數量。 執行 <code class="sourceCode python"><span class="cf">return</span></code> 陳述句必定會結束函式，並同時令函式回傳接在 <code class="sourceCode python"><span class="cf">return</span></code> 後面的運算結果。</p></li>
 </ul>
 <p>以上就是這份文件所執行的內容。除去打印、匯入、函式定義，以及主程式區塊外，我們事實上只有做三件事：</p>

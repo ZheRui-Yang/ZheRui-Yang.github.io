@@ -1,5 +1,5 @@
 ---
-title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
+title: 猴子也能懂的 AWS Rekognition 雲端人臉辨識
 ---
 
 ---
@@ -38,7 +38,9 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 
 說明頁面第一部份是利用網頁主控台創建新使用者，也就是我們會使用的方式。第二部份利用指令列工具創建使用者這裡略過不提。
 
-#### 為什麼需要創建 IAM 使用者？
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">為什麼需要創建 IAM 使用者？</summary>
 簡而言之：安全性、以及資源管理。  
 
 - 安全性   
@@ -49,6 +51,8 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 若以上兩點還不能說服你，那至少亞馬遜官方希望你要有。
 
 當然，IAM 使用者也需要一個管理者。這位管理者也就是我們現在要建立的 IAM 使用者管理者。
+
+</details>
 
 #### 建立
 點進上面的說明頁面，往下拉會看到「 Creating an administrator IAM user and user group (console) 」
@@ -135,13 +139,19 @@ title: 猴子也能懂的 AWS Rekognition 雲端圖片辨識
 
 說明頁面給了指令列環境的安裝說明超連結以及安裝後的設定。安裝後的設定是指「在指令列（本機）使用剛剛創建好的使用者身份」以及指定使用哪個伺服器。
 
-### 指令列環境與標準開發者套件是什麼？
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">指令列環境與標準開發者套件是什麼？</summary>
+
 - 指令列環境（ command line interface, CLI ）  
   是指利用文字與電腦溝通的人—機介面。例如：Microdoft Windows 的 cmd 、powershell；MacOS 的 Termianl.app。  
   總之是一些黑黑的、上面字密密麻麻的，會用的人都長的很像駭客的東西。  
   噢！對了！ Spyder 裡的 IPython shell （右下角那個）也是這個東東。  
+
 - 標準開發套件（ standard developer kit, SDK ）
   是軟體服務提供者方便下游軟體開發者加速開發的一組工具。  
+
+</details>
 
 ### 下載及安裝
 說明頁面的這裡是下載及安裝超連結
@@ -193,11 +203,21 @@ MacOS 的安裝方式有兩種：一種是圖形介面、一種是用命令列�
 ##### 只安裝給現在使用者
 若只想安裝給正在使用的使用者雖不須用 `sudo`{.bash} 提昇權限，但安裝完成後須手動放置一個軟連結到系統路徑底下的任一目錄裡。
 
-- 怎麼知道系統路徑在哪裡？  
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">怎麼知道系統路徑在哪裡？  </summary>
   打開 Termianl.app 輸入 `echo $PATH`{.bash} ，出現的文字就是在描述系統路徑包含的目錄
-- 若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？  
+
+</details>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">若系統路徑沒有任何一個目錄我有權限寫入怎麼辦？  </summary>
   用 `sudo`{.bash} 提昇權限或聯絡你的系統管理員  
-- 啊要怎麼打軟連結？  
+
+</details>
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">啊要怎麼打軟連結？  </summary>
   ```bash
   sudo ln -s /FOLDER/INSTALLED/aws-cli/aws /usr/local/bin/aws
   sudo ln -s /FOLDER/INSTALLED/aws-cli/aws_completer /usr/local/bin/aws_completer 
@@ -205,6 +225,8 @@ MacOS 的安裝方式有兩種：一種是圖形介面、一種是用命令列�
   以上兩行程式碼複製貼到 Terminal.app 裡按下 Enter，大寫字體部份替換成你安裝的目錄。若路經包含空白記得用單引號包起來（例如： `/'space splited path'/`{.bash}）。  
   尾端跟隨的目錄是軟連結檔案放置的位置，可以更換成其他系統路徑（最後面 `/aws`{.bash} 跟 `/aws_completer`{.bash} 不要改）。雖然可以更換，不過 `/usr/local/bin`{.bash} 是執行檔集中處，放在一起比較好管理。  
   另外若是有寫入權限的話，最前面的 `sudo`{.bash} 是可以省略的。  
+
+</details>
 
 安裝程式結束後，開啟 Terminal.app 一次一行輸入以下指令
 ```bash
@@ -220,8 +242,12 @@ aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0
 
 解除安裝說明也在同一頁面上，可以參考。
 
-#### Linux 與 Docker
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">Linux 與 Docker</summary>
 你認真？這份文件不是為會用這兩者之一的你準備的。
+
+</details>
 
 ### 設定本地端 AWS CLI 身份與地區
 
@@ -250,11 +276,18 @@ aws-cli/2.1.29 Python/3.7.4 Windows/10 botocore/2.0.0
 aws configure
 ```
 程式會依序問我們四個問題：身份代碼、密鑰、預設區域，與輸出格式。   
-前三者剛才都準備好了。輸出格式就寫 `json`{.bash} 就行了， JSON 是個好格式。
+前三者剛才都準備好了。輸出格式就寫 `json`{.bash} 就行了， [JSON][jsonformat] 是個好格式。
 
 完成後 AWS CLI 會在當前使用者家目錄底下建立一個 `.aws`{.bash} 目錄，並在裡面產生 `credentials`{.bash} 及 `config`{.bash} 文字檔。未來需要改動設定時除了 `aws config`{.bash} 指令外，編輯這兩個檔案也有同樣的效果。
 
-##### 什麼是家目錄？
+
+[jsonformat]: https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects/JSON
+
+
+
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">什麼是家目錄？</summary>
 使用者的頂層目錄，初始設計的時候預設家目錄以上的目錄都沒有寫入權限（不能存檔的意思）；以下的目錄則相反。  
 許多軟體都會預設把東西丟在家目錄。
 
@@ -263,17 +296,22 @@ aws configure
 - MacOS： 位於 `/Users/USERNAME`{.bash}  
   在 Terminal.app 中輸入 `echo $HOME`{.bash} 確認。打開 Dophin （檔案瀏覽器）時路徑列最左邊應該是 HOME ，按下去就到了。
 
+</details>
 
 ## 三、安裝 boto 套件
 [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html)   
 
 `boto`{.bash} 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。
 
-##### 什麼是 API ？
+<details>
+<summary onmouseover="this.style='background-color:#deeefc'"
+	 onmouseout="this.style='background-color:none'">什麼是 API ？</summary>
 應用程式介面（ Application Programming Interface, API ）。  
 
 算是蠻抽象的概念，泛指任何應用程式與另一個應用程式互動的介面。  
 以硬體舉例來說：桌上型電腦（程式 A ）的鍵盤（程式 B ）可能需要透過 USB 、PCI ，或是藍芽連接上電腦。這時我們稱他們連接的方式為 API 。
+
+</details>
 
 ### Anaconda
 若有分割虛擬環境就進入虛擬環境。   
@@ -355,7 +393,7 @@ if __name__ == "__main__":
 
 - 第 $13$ 行利用 [for 陳述句][for]迭代 `response`{.python} 名為 FaceDetails 的值。這行將該值底下的每一個東西依次存入變數 `faceDetail`{.python} 並執行底下的區塊。  
   這裡得提一下，`delete_faces`{.python} 方法的回傳值是個[字典][dict]。
-- 第 $18$ 行利用 `json`{.python} 模組的 `dumps`{.python} 函式將 `faceDetail`{.python} 轉換成格式為 JSON 的字串，並打印出來。
+- 第 $18$ 行利用 `json`{.python} 模組的 `dumps`{.python} 函式將 `faceDetail`{.python} 轉換成格式為 [JSON][jsonformat] 的字串，並打印出來。
 
 - 第 $26$ 行出現 `return`{.python} 陳述句。回傳 `response`{.python} 裡鍵為 `FaceDetails`{.python} 的值的數量。
   執行 `return`{.python} 陳述句必定會結束函式，並同時令函式回傳接在 `return`{.python} 後面的運算結果。
