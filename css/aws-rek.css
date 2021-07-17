@@ -167,6 +167,20 @@ text-decoration: none;
 #SideTOC a:not(:hover) {
 text-decoration: none;
 }
+#toc-button > rect {
+  fill: white;
+}
+#toc-button > line, rect {
+  stroke: #999;
+  stroke-width: 4;
+}
+#toc-button {
+  display: none;
+  z-index: +2;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+}
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 span.underline{text-decoration: underline;}
