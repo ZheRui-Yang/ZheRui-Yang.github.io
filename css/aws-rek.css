@@ -144,7 +144,6 @@ text-decoration: none;
 }
 #SideTOC{
   padding: 15px;
-  background-color: #f5f5f5;
   position: fixed;
   top: 0;
   left: 0;
@@ -175,11 +174,11 @@ text-decoration: none;
   stroke-width: 4;
 }
 #toc-button {
+  top: 45%;
   display: none;
   z-index: +2;
   position: fixed;
   left: 10px;
-  top: 10px;
 }
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
