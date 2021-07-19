@@ -298,7 +298,7 @@ aws configure
 
 </details>
 
-## 三、安裝 boto 套件
+## 三、安裝 boto3 套件
 [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html)   
 
 `boto`{.bash} 套件是亞馬遜雲端服務在 Python 的 API ，安裝它才能輕鬆用 Python 接介亞馬遜雲端服務。
@@ -319,7 +319,7 @@ aws configure
 conda install -c anaconda boto
 ```
 
-## 四、複製貼上
+## 四、程式碼複製貼上
 [參考頁面 — 本機圖片物件辨識](https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html)   
 [參考頁面 — 人臉偵測](https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html)
 

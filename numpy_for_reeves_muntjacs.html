@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.5, user-scalable=yes" />
   <meta name="author" content="Zhe-Rui, Yang" />
   <title>山羌也能懂的 — NumPy</title>
-  <link rel="stylesheet" href="./css/aws-rek.css" />
   <link rel="stylesheet" href="./css/aws-rek.css" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 </head>
@@ -35,7 +34,7 @@
 <li><a href="#基本操作">基本操作</a></li>
 <li><a href="#universal-functionsuniversal"><span>Universal Functions</span></a></li>
 <li><a href="#索引-indexing-與切片-slicing">索引（ indexing ）與切片（ slicing ）</a></li>
-<li><a href="#迭代">迭代</a></li>
+<li><a href="#迭代-iteration">迭代 （ iteration ）</a></li>
 <li><a href="#重塑">重塑</a>
 <ul>
 <li><a href="#numpy.ndarray.tt"><span><code class="sourceCode python">numpy.ndarray.T</code></span></a></li>
@@ -62,12 +61,122 @@
 <li><a href="#你可能還想看">你可能還想看…</a></li>
 </ul>
 </nav>
+<nav id="SideTOC" role="doc-toc">
+<h2 id="toc-title">Contents</h2>
+<ul>
+<li><a href="#為什麼要用-numpy">為什麼要用 NumPy ？</a></li>
+<li><a href="#真正開始之前">真正開始之前…</a>
+<ul>
+<li><a href="#先備知識">先備知識</a></li>
+<li><a href="#書寫慣例">書寫慣例</a></li>
+<li><a href="#安裝與匯入">安裝與匯入</a></li>
+</ul></li>
+<li><a href="#什麼是-numpy.ndarrayndarray">什麼是 <span><code class="sourceCode python">numpy.ndarray</code></span></a></li>
+<li><a href="#如何建立-numpy.ndarray">如何建立 <code class="sourceCode python">numpy.ndarray</code> ？</a>
+<ul>
+<li><a href="#借助-numpy.arrayarray-函式">借助 <span><code class="sourceCode python">numpy.array</code></span> 函式</a></li>
+<li><a href="#借助其他輔助函式">借助其他輔助函式</a></li>
+<li><a href="#其他方式">其他方式</a></li>
+</ul></li>
+<li><a href="#numpy.ndarray-被印出時的反應"><code class="sourceCode python">numpy.ndarray</code> 被印出時的反應</a></li>
+<li><a href="#基本操作">基本操作</a></li>
+<li><a href="#universal-functionsuniversal"><span>Universal Functions</span></a></li>
+<li><a href="#索引-indexing-與切片-slicing">索引（ indexing ）與切片（ slicing ）</a></li>
+<li><a href="#迭代-iteration">迭代 （ iteration ）</a></li>
+<li><a href="#重塑">重塑</a>
+<ul>
+<li><a href="#numpy.ndarray.tt"><span><code class="sourceCode python">numpy.ndarray.T</code></span></a></li>
+<li><a href="#numpy.ndarray.reshapereshape"><span><code class="sourceCode python">numpy.ndarray.reshape</code></span></a></li>
+<li><a href="#numpy.ndarray.ravelravel"><span><code class="sourceCode python">numpy.ndarray.ravel</code></span></a></li>
+<li><a href="#numpy.vstackvstack"><span><code class="sourceCode python">numpy.vstack</code></span></a></li>
+<li><a href="#numpy.hstackhstack"><span><code class="sourceCode python">numpy.hstack</code></span></a></li>
+<li><a href="#numpy.hsplithsplit"><span><code class="sourceCode python">numpy.hsplit</code></span></a></li>
+<li><a href="#numpy.vsplitvsplit"><span><code class="sourceCode python">numpy.vsplit</code></span></a></li>
+</ul></li>
+<li><a href="#view-與複製">「 View 」與複製</a>
+<ul>
+<li><a href="#這樣做不會複製任何東西">這樣做不會複製任何東西</a></li>
+<li><a href="#view-最淺層的複製">View — 最淺層的複製</a></li>
+<li><a href="#更深一層複製">更深一層複製</a></li>
+<li><a href="#完全複製">完全複製</a></li>
+</ul></li>
+<li><a href="#小技巧">小技巧</a>
+<ul>
+<li><a href="#自動成型">自動成型</a></li>
+<li><a href="#運用兩個等長的一維陣列組成一個二維陣列">運用兩個等長的一維陣列組成一個二維陣列</a></li>
+</ul></li>
+<li><a href="#最後">最後</a></li>
+<li><a href="#你可能還想看">你可能還想看…</a></li>
+</ul>
+</nav>
+<span id="change-point"></span>
+
+<svg id="toc-button" width="104" height="124" onclick="sideTOCOn();">
+  <rect x="2" y="2" rx="20" ry="20" width="100" height="120" />
+  <line x1="15" y1="18" x2="90" y2="18" />
+  <line x1="25" y1="36" x2="90" y2="36" />
+  <line x1="25" y1="54" x2="90" y2="54" />
+  <line x1="15" y1="72" x2="90" y2="72" />
+  <line x1="25" y1="89" x2="90" y2="89" />
+  <line x1="25" y1="106" x2="90" y2="106" />
+</svg>
+<svg
+   style="display:none;left:18.8%;top:0;position:fixed;z-index:+2"
+   width="200"
+   height="87.5%"
+   viewBox="0 0 10 1"
+   version="1.1"
+   id="tocBackButton"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   sodipodi:docname="toc-back.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       onclick="sideTOCOff();"
+       onmouseover="tocBackColorOn();"
+       onmouseout="tocBackColorOff();"
+       style="fill:#fff6d5;stroke:#ffcc00;stroke-width:0.257858"
+       id="rect99"
+       width="1.3457851"
+       height="3.967304"
+       x="1.4001381"
+       y="0.12783527" />
+    <path
+       onclick="sideTOCOff();"
+       onmouseover="tocBackColorOn();"
+       onmouseout="tocBackColorOff();"
+       style="fill:none;stroke:#ffcc00;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.7459233,0.12783527 1.418214,2.1532691 v 0 l 1.3277093,1.9418705"
+       id="path1513" />
+    <path
+       onclick="sideTOCOff();"
+       onmouseover="tocBackColorOn();"
+       onmouseout="tocBackColorOff();"
+       style="fill:none;stroke:#ffcc00;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.7282563,1.0071049 2.0114379,2.1081016 2.7381797,3.1605769"
+       id="path1548" />
+  </g>
+</svg>
+
 <p><a href="https://numpy.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/NumPy_logo_2020.svg/512px-NumPy_logo_2020.svg.png" /></a></p>
 <p>NumPy （ Numerical Python ）是被廣泛應用在各項工程、科學領域的 Python 函式庫（ library ），也是 PyData 和 Python 在科學領域應用系統的核心 — Pandas 、 SciPy 、 Matplotlib 、 scikit-learn 、 scikit-image 等等資料科學或其他科學領域的 Python 套件內都能見到 NumPy 的應用程式接口（ API ）。<br />
 NumPy 的主要內容為一個描述多維陣列與矩陣的資料結構 — <strong>ndarray</strong>類型（ class ）— 一個均質的（ homogeneous ）、可為一維或高維的陣列物件。</p>
 <section id="為什麼要用-numpy" class="level2">
 <h2>為什麼要用 NumPy ？</h2>
-<p>NumPy 的主要物件 <code class="sourceCode python">numpy.ndarray</code> 將 Python 程式碼「向量化」（ vectorize ），帶來以下好處： - 避免迷失在 for 迴圈的迷宮之中 - 讓程式碼閱讀更直覺、更輕鬆 - 精簡程式碼 — 更短的程式碼代表更少的錯誤</p>
+<p>NumPy 的主要物件 <code class="sourceCode python">numpy.ndarray</code> 將 Python 程式碼「向量化」（ vectorize ），帶來以下好處：</p>
+<ul>
+<li>避免迷失在 for 迴圈的迷宮之中</li>
+<li>讓程式碼閱讀更直覺、更輕鬆</li>
+<li>精簡程式碼 — 更短的程式碼代表更少的錯誤</li>
+</ul>
 <p>使用 Pandas 、 SciPy 、 Matplotlib 、 scikit-learn 、 scikit-image 等等的套件時都能見到 NumPy 的身影。</p>
 <p>NumPy 的底層由 C 語言寫成，這代表在面對大資料量或高維度的場景時，NumPy 將會比純 Python 更快完成任務。</p>
 <!--
@@ -119,7 +228,7 @@ TODO: how to implement tensor
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span></code></pre></div>
-<p>一個 <code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span></code> 後面連接一個或數個 <code class="sourceCode python">...</code> 構成一個完整的指令。</p>
+<p>一個 <code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span></code> 後面連接零個到數個 <code class="sourceCode python">...</code> 標示一個完整的指令。</p>
 <p>最後，應用程式接口的解說裡，若參數（ argument ）後面未加等號 <code class="sourceCode python"><span class="op">=</span></code> 為位置參數，若有出現則其出現的位置會影響它的意思。中括弧內的位置參數可省略不寫，它們是被設計成有預設值的位置參數。<br />
 而參數後面有等號 <code class="sourceCode python"><span class="op">=</span></code> 的參數稱為關鍵字參數，其擺放位置只限制在所有位置參數之後，次序無所謂。關鍵字參數的等號後面接的值正是預設值，若不想改動預設值可不必明文寫出。<br />
 例如：</p>
@@ -167,7 +276,7 @@ TODO: how to implement tensor
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>stdin<span class="op">&gt;</span>:<span class="dv">1</span>: VisibleDeprecationWarning: Creating an ndarray <span class="im">from</span> ragged nested sequences (which <span class="kw">is</span> a <span class="bu">list</span><span class="op">-</span><span class="kw">or</span><span class="op">-</span><span class="bu">tuple</span> of lists<span class="op">-</span><span class="kw">or</span><span class="op">-</span>tuples<span class="op">-</span><span class="kw">or</span> ndarrays <span class="cf">with</span> different</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>lengths <span class="kw">or</span> shapes) <span class="kw">is</span> deprecated. If you meant to do this, you must specify <span class="st">&#39;dtype=object&#39;</span> when creating the ndarray.</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>array([<span class="bu">list</span>([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]), <span class="bu">list</span>([<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>])], dtype<span class="op">=</span><span class="bu">object</span>)</span></code></pre></div>
-<p>我們可以看到出來的結果的元素類型是 <code class="sourceCode python"><span class="bu">object</span></code> ，NumPy 自動將不等長的串列輸入保持原樣輸入。如此一來就成為一個一維、長度二的陣列（內含兩個串列物件），各維度元素長度保持均一，因此是個合理的結果。不過合理歸合理，若我們的本意是要各 <code class="sourceCode python"><span class="bu">int</span></code> 元素做運算，這個地方就會出問題。<br />
+<p>我們可以看到出來的結果的元素類型是 <code class="sourceCode python"><span class="bu">object</span></code> ，NumPy 自動將不等長的串列保持原樣輸入。如此一來就成為一個一維、長度二的陣列（內含兩個串列物件），各維度元素長度保持均一，因此是個合理的結果。不過合理歸合理，若我們的本意是要各 <code class="sourceCode python"><span class="bu">int</span></code> 元素做運算，這個地方就會出問題。<br />
 所以除非這是我們刻意為之，盡可能先確認各維度內長度一致。</p>
 <p>接下來介紹 <code class="sourceCode python">numpy.ndarray</code> 幾個良好特性：</p>
 <ul>
@@ -207,7 +316,7 @@ TODO: how to implement tensor
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> i <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>...               [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>...               [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]])</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">@</span> i  <span class="co"># metrix dot product</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">@</span> i  <span class="co"># 矩陣內積</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>array([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]])</span></code></pre></div></li>
@@ -217,7 +326,8 @@ TODO: how to implement tensor
 </li>
 <li><a href="https://realpython.com/numpy-tensorflow-performance/">Pure Python vs NumPy vs TensorFlow Performance Comparison</a> - by RealPython</li>
 </ul></li>
-<li><p>重要的 <code class="sourceCode python">numpy.ndarray</code> 屬性</p>
+</ul>
+<p>重要的 <code class="sourceCode python">numpy.ndarray</code> 屬性</p>
 <table>
 <thead>
 <tr class="header">
@@ -247,8 +357,7 @@ TODO: how to implement tensor
 <td style="text-align: left;">整個陣列在記憶體中佔多少位元組</td>
 </tr>
 </tbody>
-</table></li>
-</ul>
+</table>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> c <span class="op">=</span> np.arange(<span class="dv">24</span>).reshape(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> c</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>array([[[ <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>],</span>
@@ -274,7 +383,7 @@ TODO: how to implement tensor
 <p>NumPy 提供相當多方式建構一個 <code class="sourceCode python">numpy.ndarray</code> 這裡介紹三大類方法：</p>
 <ul>
 <li>借助 <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array"><code class="sourceCode python">numpy.array</code></a> 函式<br />
-身為一個類型， <code class="sourceCode python">numpy.ndarray</code> 當然可以使用呼叫類型的方式取得 <code class="sourceCode python">numpy.ndarray</code> 的實例（ instance ），但語法相對不直覺。 NumPy 提供一個函式能夠輕鬆的建立 <code class="sourceCode python">numpy.ndarray</code> ，即「 <code class="sourceCode python">numpy.array</code> 」。</li>
+身為一個類型， <code class="sourceCode python">numpy.ndarray</code> 當然可以透過呼叫取得 <code class="sourceCode python">numpy.ndarray</code> 的實例（ instance ），但語法相對不直覺。 NumPy 提供一個函式能夠輕鬆的建立 <code class="sourceCode python">numpy.ndarray</code> ，即「 <code class="sourceCode python">numpy.array</code> 」。</li>
 <li>借助其他輔助函式<br />
 這裡介紹：<a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html"><code class="sourceCode python">numpy.eye</code></a> 、 <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html"><code class="sourceCode python">numpy.zeros</code></a> 、與 <a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html"><code class="sourceCode python">numpy.arange</code></a></li>
 <li>其他方式<br />
@@ -298,7 +407,7 @@ TODO: how to implement tensor
 <p>利用 <code class="sourceCode python">numpy.array</code> 建立陣列時可以同時指定類別：</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.array([<span class="fl">1.23</span>, <span class="fl">2.7</span>, <span class="fl">3.14</span>], dtype<span class="op">=</span><span class="bu">int</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span></code></pre></div>
-<p>不指定類型時， NumPy 會依據給予的元素猜測該給予怎麼樣的類別給陣列。猜測的原則簡單講是「在可描述所有元素的情況下，最精準的那個」。</p>
+<p>不指定類型時， NumPy 會依據元素猜測該給予怎麼樣的類別給陣列。猜測的原則簡單講是「在可描述所有元素的情況下，最精準的那個」。</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>...           [<span class="dv">3</span>, <span class="ot">2j</span>, <span class="dv">2</span>]])  <span class="co"># 這行有個「 2j 」，NumPy 猜這個陣列要用複數（ complex ）描述</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>array([[<span class="fl">1.</span><span class="op">+</span><span class="ot">0.j</span>, <span class="fl">2.</span><span class="op">+</span><span class="ot">0.j</span>, <span class="fl">3.</span><span class="op">+</span><span class="ot">0.j</span>],</span>
@@ -309,11 +418,10 @@ TODO: how to implement tensor
 <section id="numpy.arangearange" class="level4">
 <h4><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html"><code class="sourceCode python">numpy.arange</code></a></h4>
 <p>藉由定義數字元素起始點、終點、與間距以獲得一個一維數字陣列。<br />
-用法:<br />
-<code class="sourceCode python">numpy.arange([start, ]stop[, step], dtype<span class="op">=</span><span class="va">None</span>)</code><br />
+用法: <code class="sourceCode python">numpy.arange([start, ]stop[, step], dtype<span class="op">=</span><span class="va">None</span>)</code><br />
 <code class="sourceCode python">start</code> 、 <code class="sourceCode python">stop</code> 、與 <code class="sourceCode python">step</code> 可以是任意實數。</p>
 <p>若省略 <code class="sourceCode python">start</code> ，預設值將會是 0 ；若省略 <code class="sourceCode python">step</code> 預設值將會是 1 。<br />
-<code class="sourceCode python">numpy.arange</code> 的行為基本上與 <code class="sourceCode python"><span class="bu">range</span></code> 一致，除了他會回傳完整的 <code class="sourceCode python">numpy.ndarray</code> 物件而不是 <code class="sourceCode python"><span class="bu">range</span></code> 這個迭代器（ iterator ）物件。</p>
+<code class="sourceCode python">numpy.arange</code> 的行為基本上與 <code class="sourceCode python"><span class="bu">range</span></code> 一致，除了它會回傳完整的 <code class="sourceCode python">numpy.ndarray</code> 物件而不是 <code class="sourceCode python"><span class="bu">range</span></code> 這個迭代器（ iterator ）物件。</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.arange(<span class="dv">5</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.arange(<span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">2</span>, dtype<span class="op">=</span><span class="bu">float</span>)</span>
@@ -321,20 +429,20 @@ TODO: how to implement tensor
 <p>有趣的是，我們可以將 <code class="sourceCode python">step</code> 設為一個浮點數（ <code class="sourceCode python"><span class="bu">float</span></code> ），如此一來就能收到一個間距是浮點數的陣列。</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.arange(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">.3</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>array([<span class="fl">0.</span> , <span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>])</span></code></pre></div>
-<p>不過由於浮點數精確度並不穩定的問題，並不推薦使用這種方法（ 若有這種需求，請洽 <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html"><code class="sourceCode python">numpy.linspace</code></a> ）。</p>
+<p>不過由於浮點數精確度並不穩定的問題，並不推薦使用這種方法。 若有這種需求，請洽 <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html"><code class="sourceCode python">numpy.linspace</code></a> 。</p>
 </section>
 <section id="numpy.eyeeye" class="level4">
 <h4><a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html"><code class="sourceCode python">numpy.eye</code></a></h4>
 <p>建立一個對角線為 1 其餘為 0 的二維陣列，但是兩個維度的長度及對角線的上下偏移都各自可調整。<br />
-Usage:<br />
-<code class="sourceCode python">numpy.eye(N, M<span class="op">=</span><span class="va">None</span>, k<span class="op">=</span><span class="dv">0</span>, dtype<span class="op">=&lt;</span><span class="kw">class</span> <span class="st">&#39;float&#39;</span><span class="op">&gt;</span>)</code><br />
-N 須為整數，指定第一維度的長度（也就是有幾列）。 M 須為整數，指定第二維度的長度（也就是有幾行）。若省略則預設與 N 相同。<br />
+用法: <code class="sourceCode python">numpy.eye(N, M<span class="op">=</span><span class="va">None</span>, k<span class="op">=</span><span class="dv">0</span>, dtype<span class="op">=&lt;</span><span class="kw">class</span> <span class="st">&#39;float&#39;</span><span class="op">&gt;</span>)</code><br />
+N 須為整數，指定第一維度的長度（也就是有幾列）。<br />
+M 須為整數，指定第二維度的長度（也就是有幾行）。若省略則預設與 N 相同。<br />
 k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值則向下。若省略或設為零則由 <span class="math inline">\((0, 0)\)</span> 開始。</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.eye(<span class="dv">3</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>array([[<span class="fl">1.</span>, <span class="fl">0.</span>, <span class="fl">0.</span>],</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>       [<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>],</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>       [<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>]])</span></code></pre></div>
-<p>將對角線 1 向下偏移兩次：</p>
+<p>將對角線的 1 向下偏移兩次：</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.eye(<span class="dv">5</span>, <span class="dv">4</span>, <span class="op">-</span><span class="dv">2</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>array([[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
@@ -423,7 +531,7 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
 <span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>array([[<span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>],</span>
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>       [<span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>],</span>
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>       [ <span class="va">True</span>,  <span class="va">True</span>,  <span class="va">True</span>]])</span></code></pre></div>
-<p>Numpy 讓一維陣列相加減的寫法變得相當有意義，因為這正是向量相加減的數學寫法。另外這樣也讓我們在需要將整個矩陣做某個偏移時免去手動撰寫迴圈的麻煩。</p>
+<p>Numpy 讓一維陣列相加減的寫法變得相當有意義，因為這正是向量相加減的數學寫法。另外這個特性也讓我們在需要將整個矩陣做某個偏移時免去手動撰寫迴圈的麻煩。</p>
 <p>不過熟悉線性代數的朋友一定想問：「啊你把乘法算符拿去做元素導向的乘法了，內外積該不會要我自己動手？」</p>
 <p>「交給我！」NumPy 說道。</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">@</span> np.array([<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>])  <span class="co"># 內積</span></span>
@@ -465,13 +573,13 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
  +    +    +    +         ==&gt; [20 18 9]
 [7    3    4  (-5)]
  =    =    =    =
-[12   14   11   9 ]</code></pre>
+[12   15   11   9 ]</code></pre>
 </section>
 <section id="universal-functionsuniversal" class="level2">
 <h2><a href="https://numpy.org/doc/stable/reference/ufuncs.html">Universal Functions</a></h2>
 <p>請原諒我沒有翻譯這個名詞，這個詞太難了。官方給的定義是 — 「 Universal function （下稱 ufunc ）是個作用在 <code class="sourceCode python">numpy.ndarray</code> 時會一個元素一個元素分開做運算、支援 <a href="https://numpy.org/doc/stable/reference/ufuncs.html#ufuncs-broadcasting">array broadcasting</a> 、 <a href="https://numpy.org/doc/stable/reference/ufuncs.html#ufuncs-casting">type casting</a> 與其他林林總總標準特色的函式。是一個接受固定數量特定輸入後產出固定數量特定輸出的函數的<a href="https://numpy.org/doc/stable/glossary.html#term-vectorization">『向量化』</a>包裝」。</p>
 <p>講白一點就是本文所稱的「元素導向」的函式。<br />
-屬於 ufunc 的函式有 <code>numpy.sin</code> 、 <code>numpy.cos</code> 、 <code>numpy.exp</code> … 等等，包含實作上面所提及的一元運算和算術運算子的函式。</p>
+屬於 ufunc 的函式有 <code class="sourceCode python">numpy.sin</code> 、 <code class="sourceCode python">numpy.cos</code> 、 <code class="sourceCode python">numpy.exp</code> … 等等，包含實作上面所提及的一元運算和算術運算子的函式。</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.cos(np.array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]))</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>array([ <span class="fl">1.</span>        ,  <span class="fl">0.54030231</span>, <span class="op">-</span><span class="fl">0.41614684</span>])</span></code></pre></div>
 <p>可利用的 ufunc 列表在<a href="https://numpy.org/doc/stable/reference/ufuncs.html#available-ufuncs">這裡</a>。</p>
@@ -538,8 +646,8 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
 <li><code>x[4, ..., 5, :] 等同於 x[4, :, :, 5, :]</code></li>
 </ul>
 </section>
-<section id="迭代" class="level2">
-<h2>迭代</h2>
+<section id="迭代-iteration" class="level2">
+<h2>迭代 （ iteration ）</h2>
 <!-- TODO: what is an iteration -->
 <p>單純的迭代過 <code class="sourceCode python">numpy.ndarray</code> 會迭代第一個軸：</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> m3 <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>],</span>
@@ -582,7 +690,7 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
 <h2>重塑</h2>
 <p>介紹三種重塑的方法： <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.ravel.html"><code class="sourceCode python">numpy.ndarray.ravel</code></a> 、 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.reshape.html"><code class="sourceCode python">numpy.ndarray.reshape</code></a> 、 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.T.html"><code class="sourceCode python">numpy.ndarray.T</code></a> 。<br />
 以及疊放（ stacking ）的兩種方法： <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html"><code class="sourceCode python">numpy.vstack</code></a> 、<a href="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html"><code class="sourceCode python">numpy.hstack</code></a> 。<br />
-還有分裂（ splitting ）的兩種方法： <a href="https://numpy.org/doc/stable/reference/generated/numpy.vsplit.html"><code class="sourceCode python">numpy.vsplit</code></a> 、 <a href="https://numpy.org/doc/stable/reference/generated/numpy.hsplit.html"><code class="sourceCode python">numpy.hsplit</code></a> 。</p>
+還有拆分（ splitting ）的兩種方法： <a href="https://numpy.org/doc/stable/reference/generated/numpy.vsplit.html"><code class="sourceCode python">numpy.vsplit</code></a> 、 <a href="https://numpy.org/doc/stable/reference/generated/numpy.hsplit.html"><code class="sourceCode python">numpy.hsplit</code></a> 。</p>
 <p>這一章節使用以下陣列做介紹：</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> n <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>],</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>...               [<span class="dv">5</span>, <span class="dv">6</span>,  <span class="dv">7</span>,  <span class="dv">8</span>],</span>
@@ -595,11 +703,11 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
 <p><code class="sourceCode python">numpy.ndarray</code> 的屬性之一，為該陣列的轉置（ transpose ）。</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> n.T</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>array([[ <span class="dv">1</span>,  <span class="dv">5</span>,  <span class="dv">9</span>],</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>       [ <span class="dv">2</span>,  <span class="dv">6</span>,  <span class="dv">0</span>],</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>       [ <span class="dv">2</span>,  <span class="dv">6</span>, <span class="dv">10</span>],</span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>       [ <span class="dv">3</span>,  <span class="dv">7</span>, <span class="dv">11</span>],</span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       [ <span class="dv">4</span>,  <span class="dv">8</span>, <span class="dv">12</span>]])</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> n.shape</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>(<span class="dv">3</span>, <span class="dv">4</span>)</span></code></pre></div>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> n.T.shape</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>(<span class="dv">4</span>, <span class="dv">3</span>)</span></code></pre></div>
 <!-- TODO: 轉置是啥？ -->
 <p>相似作用的函式有： <a href="https://numpy.org/doc/stable/reference/generated/numpy.transpose.html#numpy.transpose"><code class="sourceCode python">numpy.transpose</code></a></p>
 </section>
@@ -648,8 +756,8 @@ k 須為整數，指定對角線 1 的偏移量。正值為往上偏移，負值
 </section>
 <section id="numpy.hsplithsplit" class="level3">
 <h3><a href="https://numpy.org/doc/stable/reference/generated/numpy.hsplit.html"><code class="sourceCode python">numpy.hsplit</code></a></h3>
-<p>沿著水平方向將陣列內元素平均分配成數個小組。 Usage:<br />
-<code class="sourceCode python">numpy.hsplit(arry, indices_or_sections) <span class="op">-&gt;</span> <span class="bu">list</span></code><br />
+<p>沿著水平方向將陣列內元素平均分配成數個小組。<br />
+用法: <code class="sourceCode python">numpy.hsplit(arry, indices_or_sections) <span class="op">-&gt;</span> <span class="bu">list</span></code><br />
 arry 是即將被拆分的陣列、indices_or_sections 指定平均要拆分成幾組。回傳值是包含陣列的串列。</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> p <span class="op">=</span> np.arange(<span class="dv">20</span>).reshape((<span class="dv">2</span>, <span class="dv">10</span>))</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> p</span>
@@ -662,8 +770,8 @@ arry 是即將被拆分的陣列、indices_or_sections 指定平均要拆分成�
 </section>
 <section id="numpy.vsplitvsplit" class="level3">
 <h3><a href="https://numpy.org/doc/stable/reference/generated/numpy.vsplit.html"><code class="sourceCode python">numpy.vsplit</code></a></h3>
-<p>沿著垂直方向將陣列內元素平均分配成數個小組。 Usage:<br />
-<code class="sourceCode python">numpy.vsplit(arry, indices_or_sections) <span class="op">-&gt;</span> <span class="bu">list</span></code><br />
+<p>沿著垂直方向將陣列內元素平均分配成數個小組。<br />
+用法: <code class="sourceCode python">numpy.vsplit(arry, indices_or_sections) <span class="op">-&gt;</span> <span class="bu">list</span></code><br />
 arry 是即將被拆分的陣列、indices_or_sections 指定平均要拆分成幾組。回傳值是包含陣列的串列。</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> p.resize((<span class="dv">4</span>, <span class="dv">5</span>))</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> p</span>
@@ -794,5 +902,6 @@ arry 是即將被拆分的陣列、indices_or_sections 指定平均要拆分成�
 <li><a href="https://commons.wikimedia.org/wiki/File:NumPy_logo_2020.svg">你可以在這裡找到標題的圖片</a></li>
 </ul>
 </section>
+<script src="scripts/floating-toc.js" type="text/javascript"></script>
 </body>
 </html>
