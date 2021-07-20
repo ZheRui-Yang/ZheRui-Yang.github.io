@@ -56,6 +56,7 @@
 <ul>
 <li><a href="#自動成型">自動成型</a></li>
 <li><a href="#運用兩個等長的一維陣列組成一個二維陣列">運用兩個等長的一維陣列組成一個二維陣列</a></li>
+<li><a href="#運用邏輯運算抽取元素">運用邏輯運算抽取元素</a></li>
 </ul></li>
 <li><a href="#最後">最後</a></li>
 <li><a href="#你可能還想看">你可能還想看…</a></li>
@@ -104,6 +105,7 @@
 <ul>
 <li><a href="#自動成型">自動成型</a></li>
 <li><a href="#運用兩個等長的一維陣列組成一個二維陣列">運用兩個等長的一維陣列組成一個二維陣列</a></li>
+<li><a href="#運用邏輯運算抽取元素">運用邏輯運算抽取元素</a></li>
 </ul></li>
 <li><a href="#最後">最後</a></li>
 <li><a href="#你可能還想看">你可能還想看…</a></li>
@@ -874,6 +876,20 @@ arry 是即將被拆分的陣列、indices_or_sections 指定平均要拆分成�
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> np.vstack((s1, s2))</span>
 <span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>array([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
 <span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])</span></code></pre></div>
+</section>
+<section id="運用邏輯運算抽取元素" class="level3">
+<h3>運用邏輯運算抽取元素</h3>
+<p>我們可以把陣列本身化為索引遮罩來過濾符合條件的元素。</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> m2 <span class="op">=</span> np.arange(<span class="dv">25</span>).reshape((<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> m2</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>array([[ <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>],</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>       [ <span class="dv">5</span>,  <span class="dv">6</span>,  <span class="dv">7</span>,  <span class="dv">8</span>,  <span class="dv">9</span>],</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">14</span>],</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>],</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>       [<span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">24</span>]])</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> m2[m2 <span class="op">&gt;</span> <span class="dv">5</span>]  <span class="co"># 過濾出所有大於 5 的元素</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>array([ <span class="dv">6</span>,  <span class="dv">7</span>,  <span class="dv">8</span>,  <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>,</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>       <span class="dv">23</span>, <span class="dv">24</span>])</span></code></pre></div>
 </section>
 </section>
 <section id="最後" class="level2">
