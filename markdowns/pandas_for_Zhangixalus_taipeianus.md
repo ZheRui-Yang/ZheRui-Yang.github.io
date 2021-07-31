@@ -399,7 +399,7 @@ memory usage: 687.9+ KB
 
 </details>
 
-值得注意的是，若 memory usage 出現 + 號（就像這個例子），代表實際佔用的記憶體比顯示的還多。想確知真正佔用的記憶體大小，請把 `memory_usage=True`{.python} 作為參數呼叫 `info`{.python} 。
+值得注意的是，若 memory usage 出現 + 號（就像這個例子），代表實際佔用的記憶體比顯示的還多。想確知真正佔用的記憶體大小，請把 `memory_usage='deep'`{.python} 作為參數呼叫 `info`{.python} 。
 
 
 [head]: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html
